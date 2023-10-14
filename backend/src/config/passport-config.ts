@@ -1,10 +1,26 @@
 import passport from "passport";
-import chalk from "chalk";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 
 import MovieUser from "../models/movie-user";
 
+type PassportUser = {
+  _id?: string;
+};
+
 export const passportConfig = () => {
+  passport.serializeUser(async (user: PassportUser, done) => {
+    done(null, user._id);
+  });
+
+  passport.deserializeUser(async (id, done) => {
+    const movieUser = await MovieUser.findById(id);
+
+    if (movieUser) {
+      done(null, movieUser);
+    }
+  });
+
+  // Setup the google strategy
   passport.use(
     new GoogleStrategy(
       {
@@ -12,7 +28,7 @@ export const passportConfig = () => {
         clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET!,
         callbackURL: "/auth/google/redirect",
       },
-      async (_accessToken, _refreshToken, profile, _done) => {
+      async (accessToken, refreshToken, profile, done) => {
         // Create a user or use the existing one
         try {
           const existingMovieUser = await MovieUser.findOne({
@@ -23,13 +39,16 @@ export const passportConfig = () => {
             const movieUser = new MovieUser({
               name: profile.displayName,
               googleId: profile.id,
+              thumbnailUrl: profile._json.image.url,
             });
 
             await movieUser.save();
+            done(null, movieUser);
 
-            console.log(`Created user: ${movieUser}`);
+            console.log(`[passport-config] Created user: ${movieUser}`);
           } else {
-            console.log(`Saved user: ${existingMovieUser}`);
+            console.log(`[passport-config] Saved user: ${existingMovieUser}`);
+            done(null, existingMovieUser);
           }
         } catch (e) {
           console.log(e);

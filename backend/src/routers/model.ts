@@ -3,7 +3,7 @@ import { Request, Response, Router } from "express";
 
 const router = Router();
 
-router.get("/run-model", async (req: Request, res: Response) => {
+router.get("/recommendation", async (req: Request, res: Response) => {
   try {
     const movie = req.query.movie;
     const predictedResults = await axios.get(
@@ -11,6 +11,17 @@ router.get("/run-model", async (req: Request, res: Response) => {
     );
 
     res.status(200).send(predictedResults.data);
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      res.status(400).send(e.message);
+    }
+    res.status(500).send();
+  }
+});
+
+router.get("/sentiment", async (req: Request, res: Response) => {
+  try {
+    const comment = req.query.comment;
   } catch (e) {
     if (e instanceof AxiosError) {
       res.status(400).send(e.message);

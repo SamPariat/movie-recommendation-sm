@@ -1,15 +1,25 @@
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import passport from "passport";
 
 const router = Router();
 
 // Google OAuth Login
-router.get("/login", async (req, res) => {
+router.get("/login", async (req: Request, res: Response) => {
   res.render("login");
 });
 
 // Google OAuth Logout
-router.get("/logout", async (req, res) => {});
+router.get(
+  "/logout",
+  async (req: Request, res: Response, next: NextFunction) => {
+    req.logOut((error) => {
+      if (error) {
+        return next(error);
+      }
+      res.status(200).send("Logged out...");
+    });
+  }
+);
 
 // Google OAuth Authentication
 router.get(
@@ -17,7 +27,7 @@ router.get(
   passport.authenticate("google", {
     scope: ["profile"],
   }),
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     console.log("Auth data");
   }
 );
@@ -25,8 +35,12 @@ router.get(
 // Google OAuth Callback Route where the information is sent back
 // Gets the code from the redirect URI and sends it to Google
 // to get user info
-router.get("/redirect", passport.authenticate("google"), async (req, res) => {
-  res.json({ message: "hello" });
-});
+router.get(
+  "/redirect",
+  passport.authenticate("google"),
+  async (req: Request, res: Response) => {
+    res.redirect("/profile");
+  }
+);
 
 export default router;

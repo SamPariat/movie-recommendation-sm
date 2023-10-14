@@ -17,18 +17,22 @@
     "axios": "^1.5.1",
     "chalk": "^4.1.0",
     "dotenv": "^16.3.1",
-    "ejs": "^3.1.9",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "firebase": "^10.4.0",
     "firebase-admin": "^11.11.0",
+    "mongoose": "^7.6.2",
     "passport": "^0.6.0",
     "passport-google-oauth2": "^0.2.0",
+    "passport-local": "^1.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
   "devDependencies": {
+    "@types/express-session": "^1.17.8",
     "@types/passport": "^1.0.13",
     "@types/passport-google-oauth2": "^0.1.6",
+    "@types/passport-local": "^1.0.36",
     "nodemon": "^3.0.1",
     "rimraf": "^5.0.1"
   }
