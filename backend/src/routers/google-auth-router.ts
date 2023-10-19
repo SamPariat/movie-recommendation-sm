@@ -4,12 +4,12 @@ import passport from "passport";
 const router = Router();
 
 // Google OAuth Login
-router.get("/login", async (req: Request, res: Response) => {
+router.post("/login", async (req: Request, res: Response) => {
   res.render("login");
 });
 
 // Google OAuth Logout
-router.get(
+router.post(
   "/logout",
   async (req: Request, res: Response, next: NextFunction) => {
     req.logOut((error) => {

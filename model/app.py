@@ -23,6 +23,9 @@ def movie_prediction():
         # Get the movie from /movie-prediction?movie=...
         input_movie = request.args.get('movie')
 
+        if not input_movie or input_movie not in movies['title'].values:
+            return jsonify({'error': 'Invalid movie title'}), 400
+
         # Fetch movie index
         movie_index = movies[movies['title'] == input_movie].index[0]
         distances = cos_similarity[movie_index]
@@ -30,7 +33,6 @@ def movie_prediction():
         # Add indexes to each of the movies in the dataframe,
         # then sort by the cosine similarity values
         # then find the top 5 (excludes the current movie)
-        print(distances)
         top_movies_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
         
         returned_movies = []
@@ -40,7 +42,24 @@ def movie_prediction():
 
         return jsonify(returned_movies), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/all-movies')
+def all_movies():
+    try:
+        movie_titles_np = pd.read_csv('5000_movies.csv').iloc[:, 3::14].values
+
+        not_np_array_movies = movie_titles_np.tolist()
+        not_np_array_movies = sorted(not_np_array_movies, key=lambda x: x[1])
+        dicc_arr = []
+
+        for i in not_np_array_movies:
+            dicc = {'id': i[0], 'title': i[1]}
+            dicc_arr.append(dicc)
+
+        return jsonify(dicc_arr), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     print('BTP Flask backend running on port 3524')
