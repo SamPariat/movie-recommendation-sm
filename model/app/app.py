@@ -7,6 +7,6 @@ app = Flask(__name__)
 app.register_blueprint(recommendation_blueprint)
 app.register_blueprint(sentiment_blueprint)
 
-if __name__ == '__main__':
-    print('BTP Flask backend running on port 3524')
-    app.run(debug=True, port=3524)
+# if __name__ == '__main__':
+#     print('BTP Flask backend running on port 3524')
+#     app.run(debug=True, port=3524)
