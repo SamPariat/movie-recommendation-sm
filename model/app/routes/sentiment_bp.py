@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from utils.sentiment_util import SentimentUtil
+from app.utils.sentiment_util import SentimentUtil
 
 sentiment_blueprint = Blueprint('sentiment_blueprint', __name__)
 

@@ -1,6 +1,6 @@
 from flask import Flask
-from routes.recommendation_bp import recommendation_blueprint
-from routes.sentiment_bp import sentiment_blueprint
+from .routes.recommendation_bp import recommendation_blueprint
+from .routes.sentiment_bp import sentiment_blueprint
 
 app = Flask(__name__)
 
