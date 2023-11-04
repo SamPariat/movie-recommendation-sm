@@ -1,4 +1,6 @@
 scikit-learn
 nltk
+pandas
+numpy
 Flask
 Gunicorn
