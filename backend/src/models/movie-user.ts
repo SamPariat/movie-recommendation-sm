@@ -2,6 +2,7 @@ import { Document, Model, Schema, model } from "mongoose";
 
 export interface IMovieUser extends Document {
   name: string;
+  email: string;
   googleId?: string;
   thumbnailUrl?: string;
   password?: string;
@@ -9,6 +10,10 @@ export interface IMovieUser extends Document {
 
 const movieUserSchema = new Schema<IMovieUser>({
   name: {
+    type: String,
+    required: true,
+  },
+  email: {
     type: String,
     required: true,
   },

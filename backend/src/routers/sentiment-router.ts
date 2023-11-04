@@ -1,13 +1,46 @@
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { Request, Response, Router } from "express";
 
-import { INTERNAL_SERVER_ERROR } from "../constants";
+import {
+  ERROR_FETCHING_SENTIMENT,
+  INTERNAL_SERVER_ERROR,
+  NO_REVIEW_PROVIDED,
+} from "../constants";
+import authCheck from "../middleware/auth-check";
+import MovieReview from "../models/movie-review";
+import { IMovieUser } from "../models/movie-user";
 
 const router = Router();
 
-router.get("/sentiment", async (req: Request, res: Response) => {
+router.post("/save-review", authCheck, async (req: Request, res: Response) => {
   try {
-    const comment = req.query.comment;
+    const review = req.query.review;
+
+    if (!review) {
+      return res.status(400).send({ error: NO_REVIEW_PROVIDED });
+    }
+
+    const user = req.user as IMovieUser;
+
+    const response = await axios.get<{ sentiment: string }>(
+      `http://127.0.0.1:3524/sentiment?review=${review}`
+    );
+
+    if (response.status === 500) {
+      return res.status(500).send({ error: ERROR_FETCHING_SENTIMENT });
+    }
+
+    const { sentiment } = response.data;
+
+    const newReview = new MovieReview({
+      review,
+      sentiment,
+      movieUser: user?._id,
+    });
+
+    await newReview.save();
+
+    return res.status(201).send(newReview);
   } catch (e) {
     if (e instanceof AxiosError) {
       return res.status(400).send({ error: e.message });

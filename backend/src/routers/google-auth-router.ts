@@ -1,35 +1,34 @@
 import { NextFunction, Request, Response, Router } from "express";
 import passport from "passport";
 
+import { UNABLE_TO_AUTHENTICATE } from "../constants";
+
 const router = Router();
 
 // Google OAuth Login
-router.post("/login", async (req: Request, res: Response) => {
-  res.render("login");
+router.get("/login-fail", async (req: Request, res: Response) => {
+  res.status(401).send({ message: UNABLE_TO_AUTHENTICATE });
 });
 
 // Google OAuth Logout
-router.post(
+router.get(
   "/logout",
   async (req: Request, res: Response, next: NextFunction) => {
     req.logOut((error) => {
       if (error) {
         return next(error);
       }
-      res.status(200).send("Logged out...");
+      res.status(200).send();
     });
   }
 );
 
 // Google OAuth Authentication
 router.get(
-  "/auth-data",
+  "/authenticate",
   passport.authenticate("google", {
-    scope: ["profile"],
-  }),
-  async (req: Request, res: Response) => {
-    console.log("Auth data");
-  }
+    scope: ["profile", "email"],
+  })
 );
 
 // Google OAuth Callback Route where the information is sent back
@@ -39,7 +38,7 @@ router.get(
   "/redirect",
   passport.authenticate("google"),
   async (req: Request, res: Response) => {
-    res.redirect("/profile");
+    res.redirect(process.env.DEV_CLIENT_URL as string);
   }
 );
 

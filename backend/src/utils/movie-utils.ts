@@ -2,7 +2,9 @@ import axios, { AxiosError } from "axios";
 
 import {
   ERROR_FETCHING_MOVIE_INFORMATION,
+  INVALID_MOVIE_ID,
   MOVIE_DOES_NOT_EXIST,
+  UNAUTHORIZED,
 } from "../constants";
 
 interface CommonDetails {
@@ -39,10 +41,6 @@ export const getMovieInformationById = async (
       }
     );
 
-    if (response.data["status_code"] === 34) {
-      throw new AxiosError(MOVIE_DOES_NOT_EXIST);
-    }
-
     const movieData = response.data;
 
     return {
@@ -53,7 +51,19 @@ export const getMovieInformationById = async (
     };
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      throw new AxiosError(ERROR_FETCHING_MOVIE_INFORMATION);
+      if (e.response?.status === 401) {
+        throw new AxiosError(UNAUTHORIZED);
+      } else if (e.response?.status === 404) {
+        if (e.response?.data["status_code"] === 6) {
+          throw new AxiosError(INVALID_MOVIE_ID);
+        } else if (e.response?.data["status_code"] === 34) {
+          throw new AxiosError(MOVIE_DOES_NOT_EXIST);
+        }
+      } else if (e.message === INVALID_MOVIE_ID) {
+        throw new AxiosError(INVALID_MOVIE_ID);
+      } else {
+        throw new AxiosError(ERROR_FETCHING_MOVIE_INFORMATION);
+      }
     }
     return null;
   }

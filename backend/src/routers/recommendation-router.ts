@@ -44,8 +44,6 @@ router.get("/recommendation", async (req: Request, res: Response) => {
 
     res.status(200).send(movieData);
   } catch (e: any) {
-    console.log(JSON.stringify(e));
-
     if (axios.isAxiosError(e)) {
       if (e.message === ERROR_FETCHING_MOVIE_INFORMATION) {
         return res.status(400).send({ error: MOVIE_DOES_NOT_EXIST });
