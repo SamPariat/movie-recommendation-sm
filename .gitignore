@@ -24,6 +24,6 @@ dist-ssr
 *.sw?
 
 *.env
-*.pkl
 *.ipynb_checkpoints
 *__pycache__
+*.csv
