@@ -20,6 +20,7 @@ router.get("/cast", async (req: Request, res: Response) => {
 
     res.status(200).send(castInfo);
   } catch (e: any) {
+    console.log(e);
     if (axios.isAxiosError(e)) {
       if (e.message === ERROR_FETCHING_MOVIE_INFORMATION) {
         return res.status(400).send({ error: MOVIE_DOES_NOT_EXIST });
@@ -35,7 +36,9 @@ router.get("/cast", async (req: Request, res: Response) => {
 
 router.get("/all", async (req: Request, res: Response) => {
   try {
-    const response = await axios.get("http://127.0.0.1:3524/all-movies");
+    const response = await axios.get(
+      `${process.env.MODEL_BASE_URL}/all-movies`
+    );
 
     const allMovies = response.data;
     if (!allMovies) {

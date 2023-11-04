@@ -23,7 +23,7 @@ router.post("/save-review", authCheck, async (req: Request, res: Response) => {
     const user = req.user as IMovieUser;
 
     const response = await axios.get<{ sentiment: string }>(
-      `http://127.0.0.1:3524/sentiment?review=${review}`
+      `${process.env.MODEL_BASE_URL}/sentiment?review=${review}`
     );
 
     if (response.status === 500) {
