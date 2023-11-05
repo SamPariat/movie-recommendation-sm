@@ -6,6 +6,7 @@ import HomePage from "./components/homepage/HomePage";
 import NavContainer from "./components/navbar/NavContainer";
 import Reviews from "./components/reviews/Reviews";
 import Cast from "./components/cast&crew/Cast";
+import Login from "./components/login/Login";
 
 const theme = createTheme({
   palette: {
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: "about", element: null },
-      { path: "login", element: null },
+      { path: "login", element: <Login /> },
       { path: "cast-crew/:movieId", element: <Cast /> },
       { path: "reviews/:movieId", element: <Reviews /> },
     ],
