@@ -2,13 +2,31 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import { useQuery } from "@tanstack/react-query";
+
+import api from "../../api";
+import type { TrendingInfo } from "../../types/movie";
 
 const GridSplit = () => {
+  const fetchLatestTrending = async () => {
+    const response = await api<TrendingInfo | null>(
+      "get",
+      "/movie/latest-trending",
+      null
+    );
+    return response.data;
+  };
+
+  const { data, status } = useQuery<TrendingInfo | null>({
+    queryKey: ["latest trending"],
+    queryFn: fetchLatestTrending,
+  });
+
   return (
     <Grid container columnSpacing={1}>
       <Grid item xs={12} sm={4} md={3} lg={2} alignItems="center">
         <img
-          src="https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg"
+          src={data?.imagePath}
           style={{
             maxWidth: 250,
             borderRadius: 15,
@@ -26,7 +44,7 @@ const GridSplit = () => {
             color="secondary"
             fontWeight="bold"
           >
-            Interstellar
+            {data?.title}
           </Typography>
           <Typography ml={0.3} gutterBottom textAlign="left" fontSize={13}>
             2002

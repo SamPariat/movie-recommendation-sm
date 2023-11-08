@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, Method } from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3523",
+  baseURL: import.meta.env.VITE_BACKEND_URL,
 });
 
 const request = <T>(

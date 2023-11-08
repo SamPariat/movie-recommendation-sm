@@ -10,6 +10,7 @@ export const UNABLE_TO_AUTHENTICATE = "Unable to authenticate";
 export const INVALID_CREDENTIALS = "Invalid credentials";
 export const ERROR_FETCHING_SENTIMENT = "Error fetching sentiment";
 export const NO_REVIEW_PROVIDED = "No review provided";
+export const ERROR_FETCHING_TRENDING_MOVIES = "Error fetching trending movies";
 
 export enum Sentiment {
   Positive = "Positive",

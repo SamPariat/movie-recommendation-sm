@@ -3,7 +3,6 @@ import MovieFilterIcon from "@mui/icons-material/MovieFilter";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -11,18 +10,15 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import React from "react";
+import { useState } from "react";
+import NavButtons from "./NavButtons";
+import SettingsMenu from "./SettingsMenu";
 
 const pages = ["Home", "About", "Login"];
-const settings = ["Profile", "Account", "Logout"];
 
 export const Navbar = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -33,10 +29,6 @@ export const Navbar = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
   };
 
   return (
@@ -50,14 +42,11 @@ export const Navbar = () => {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            fontWeight={700}
+            mr={2}
             sx={{
-              mr: 2,
               display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
               color: "secondary.main",
-              textDecoration: "none",
             }}
           >
             CineSuggest
@@ -112,7 +101,6 @@ export const Navbar = () => {
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -125,17 +113,8 @@ export const Navbar = () => {
           >
             CineSuggest
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "secondary.main", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
+
+          <NavButtons navMenuCloseHandler={handleCloseNavMenu} />
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
@@ -147,38 +126,15 @@ export const Navbar = () => {
                 />
               </IconButton>
             </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography
-                    fontWeight={700}
-                    color="secondary"
-                    textAlign="center"
-                  >
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            <SettingsMenu
+              userAnchor={anchorElUser}
+              setUserAnchor={setAnchorElUser}
+            />
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
   );
 };
+
 export default Navbar;

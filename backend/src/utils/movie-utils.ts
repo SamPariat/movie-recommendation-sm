@@ -11,9 +11,12 @@ interface CommonDetails {
   imagePath: string;
 }
 
-export interface MovieInfo extends CommonDetails {
+interface MovieCommonDetails extends CommonDetails {
   adult: boolean;
   tagline: string;
+}
+
+export interface MovieInfo extends MovieCommonDetails {
   overview: string;
 }
 
@@ -25,6 +28,11 @@ interface PersonInfo extends CommonDetails {
 export interface CastInfo {
   actors: PersonInfo[];
   director: Omit<PersonInfo, "character">[];
+}
+
+export interface TrendingInfo extends Omit<MovieCommonDetails, "tagline"> {
+  id: number;
+  title: string;
 }
 
 export const getMovieInformationById = async (
@@ -121,3 +129,69 @@ export const getMovieCastById = async (
     return null;
   }
 };
+
+export const getTop5Trending = async (): Promise<TrendingInfo[] | null> => {
+  try {
+    const response = await axios.get(
+      "https://api.themoviedb.org/3/trending/movie/day?language=en-US",
+      {
+        headers: {
+          Authorization: "Bearer " + process.env.TMDB_API_KEY,
+          Accept: "application/json",
+        },
+      }
+    );
+
+    const results = response.data.results;
+    const trendingMovies: TrendingInfo[] = [];
+
+    for (let i = 1; i <= 5; i++) {
+      trendingMovies.push({
+        id: results[i].id,
+        adult: results[i]["adult"],
+        imagePath:
+          "https://image.tmdb.org/t/p/w500" + results[i]["poster_path"],
+        title: results[i]["original_title"],
+      });
+    }
+
+    return trendingMovies;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw new AxiosError(ERROR_FETCHING_MOVIE_INFORMATION);
+    }
+    return null;
+  }
+};
+
+export const getLatestTrendingMovie =
+  async (): Promise<TrendingInfo | null> => {
+    try {
+      const response = await axios.get(
+        "https://api.themoviedb.org/3/trending/movie/day?language=en-US",
+        {
+          headers: {
+            Authorization: "Bearer " + process.env.TMDB_API_KEY,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      const results = response.data.results;
+
+      const latest: TrendingInfo = {
+        id: results[0].id,
+        adult: results[0]["adult"],
+        imagePath:
+          "https://image.tmdb.org/t/p/w500" + results[0]["poster_path"],
+        title: results[0]["original_title"],
+      };
+
+      return latest;
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        throw new AxiosError(ERROR_FETCHING_MOVIE_INFORMATION);
+      }
+      return null;
+    }
+  };

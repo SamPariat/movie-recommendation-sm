@@ -2,9 +2,12 @@ interface CommonDetails {
   imagePath: string;
 }
 
-interface MovieInfo extends CommonDetails {
+interface MovieCommonDetails extends CommonDetails {
   adult: boolean;
   tagline: string;
+}
+
+export interface MovieInfo extends MovieCommonDetails {
   overview: string;
 }
 
@@ -13,12 +16,12 @@ interface PersonInfo extends CommonDetails {
   character: string;
 }
 
-interface CastInfo {
+export interface CastInfo {
   actors: PersonInfo[];
   director: Omit<PersonInfo, "character">[];
 }
 
-export interface MovieData extends MovieInfo {
+export interface TrendingInfo extends Omit<MovieCommonDetails, "tagline"> {
+  id: number;
   title: string;
 }
-    

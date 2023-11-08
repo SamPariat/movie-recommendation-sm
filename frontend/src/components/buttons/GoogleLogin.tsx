@@ -9,7 +9,7 @@ const GoogleLogin = () => {
   };
 
   return (
-    <Button bgcolor="primary.main" onClick={signIn}>
+    <Button onClick={signIn} color="primary">
       Sign in with Google
     </Button>
   );
