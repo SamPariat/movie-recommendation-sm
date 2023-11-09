@@ -30,7 +30,7 @@ export interface CastInfo {
   director: Omit<PersonInfo, "character">[];
 }
 
-export interface TrendingInfo extends Omit<MovieCommonDetails, "tagline"> {
+export interface TrendingInfo extends MovieCommonDetails {
   id: number;
   title: string;
 }
@@ -152,6 +152,7 @@ export const getTop5Trending = async (): Promise<TrendingInfo[] | null> => {
         imagePath:
           "https://image.tmdb.org/t/p/w500" + results[i]["poster_path"],
         title: results[i]["original_title"],
+        tagline: results[i]["overview"],
       });
     }
 
@@ -185,6 +186,7 @@ export const getLatestTrendingMovie =
         imagePath:
           "https://image.tmdb.org/t/p/w500" + results[0]["poster_path"],
         title: results[0]["original_title"],
+        tagline: results[0]["overview"],
       };
 
       return latest;
