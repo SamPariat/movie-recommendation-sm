@@ -2,10 +2,15 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import { useParams } from "react-router-dom";
 
-import Gridsplit from "../homepage/GridSplit";
+
+// import Gridsplit from "../homepage/GridSplit";
+import NotUserReviewsButton from "./NotUserReviewsButton";
 
 const Reviews = () => {
+  const location = useParams();
+  console.log(location);
   return (
     <Box
       bgcolor="primary.main"
@@ -14,7 +19,7 @@ const Reviews = () => {
       minHeight="100vh"
     >
       <Grid container py={10}>
-        <Gridsplit />
+        <NotUserReviewsButton />
       </Grid>
       <Typography
         textAlign="left"
@@ -23,7 +28,7 @@ const Reviews = () => {
         variant="h5"
         fontWeight="bold"
       >
-        User Reviews
+        Write Your Own Review
       </Typography>
       <Grid container py={5} justifyContent="center">
         <Grid item xs={12} sm={8} md={9} lg={10} mt={2}>
@@ -52,7 +57,7 @@ const Reviews = () => {
         variant="h5"
         fontWeight="bold"
       >
-        Write Your Own Review
+        User Reviews
       </Typography>
       <Grid container py={5} justifyContent="center">
         <Grid item xs={12} sm={8} md={9} lg={10} mt={2}>

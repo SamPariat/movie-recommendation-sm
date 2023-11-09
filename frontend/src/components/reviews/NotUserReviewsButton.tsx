@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import type { TrendingInfo } from "../../types/movie";
 
-const GridSplit = () => {
+const NotUserReviewsButton = () => {
   const fetchLatestTrending = async () => {
     const response = await api<TrendingInfo | null>(
       "get",
@@ -109,14 +109,6 @@ const GridSplit = () => {
                 Cast & Crew
               </Button>
             </Grid>
-            <Grid item>
-              <Button
-                sx={{ color: "white", border: 1, borderRadius: 20 }}
-                onClick={() => navigate(`/reviews/${data?.id}`)}
-              >
-                User Reviews
-              </Button>
-            </Grid>
           </Grid>
         </Paper>
       </Grid>
@@ -124,4 +116,4 @@ const GridSplit = () => {
   );
 };
 
-export default GridSplit;
+export default NotUserReviewsButton;

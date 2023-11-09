@@ -2,7 +2,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 
-const settings = ["Profile", "Account", "Logout"];
+const settings = ["Profile", "Logout"];
 
 type SettingsMenuProps = {
   // For the anchor element
@@ -15,7 +15,7 @@ type SettingsMenuProps = {
  *
  * Returns a SettingsMenu that displays when the Avatar is clicked
  * @param {SettingsMenuProps} props Props needed for the SettingsMenu component
- * 
+ *
  */
 const SettingsMenu = ({ userAnchor, setUserAnchor }: SettingsMenuProps) => {
   const handleCloseUserMenu = () => {
