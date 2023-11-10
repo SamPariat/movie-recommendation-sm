@@ -11,12 +11,36 @@ import {
   UNAUTHORIZED,
 } from "../constants";
 import {
-  getMovieCastById,
   getLatestTrendingMovie,
+  getMovieCastById,
+  getMovieInformationById,
   getTop5Trending,
 } from "../utils/movie-utils";
 
 const router = Router();
+
+router.get("/info", async (req: Request, res: Response) => {
+  try {
+    const id = req.query.id as string;
+    const movieInfo = await getMovieInformationById(+id);
+
+    res.status(200).send(movieInfo);
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      if (e.message === INVALID_MOVIE_ID) {
+        return res.status(400).send({ error: INVALID_MOVIE_ID });
+      } else if (e.message === UNAUTHORIZED) {
+        res.status(401).send({ error: UNAUTHORIZED });
+      } else if (
+        e.message === MOVIE_DOES_NOT_EXIST ||
+        e.message === ERROR_FETCHING_MOVIE_INFORMATION
+      ) {
+        res.status(404).send({ error: e.message });
+      }
+    }
+    res.status(500).send({ error: INTERNAL_SERVER_ERROR });
+  }
+});
 
 router.get("/cast", async (req: Request, res: Response) => {
   try {

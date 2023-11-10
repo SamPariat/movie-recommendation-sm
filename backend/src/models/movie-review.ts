@@ -3,6 +3,7 @@ import { Document, Model, Schema, model } from "mongoose";
 export interface IMovieReview extends Document {
   review: string;
   sentiment: string;
+  movie: string;
   movieUser: Schema.Types.ObjectId;
 }
 
@@ -12,6 +13,10 @@ const movieReviewSchema = new Schema<IMovieReview>({
     required: true,
   },
   sentiment: {
+    type: String,
+    required: true,
+  },
+  movie: {
     type: String,
     required: true,
   },

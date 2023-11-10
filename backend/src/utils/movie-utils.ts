@@ -18,6 +18,7 @@ interface MovieCommonDetails extends CommonDetails {
 
 export interface MovieInfo extends MovieCommonDetails {
   overview: string;
+  title: string;
 }
 
 interface PersonInfo extends CommonDetails {
@@ -52,6 +53,7 @@ export const getMovieInformationById = async (
     const movieData = response.data;
 
     return {
+      title: movieData["original_title"],
       adult: movieData["adult"],
       imagePath: "https://image.tmdb.org/t/p/w185" + movieData["poster_path"],
       tagline: movieData["tagline"],

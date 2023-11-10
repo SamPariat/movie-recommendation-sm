@@ -42,7 +42,7 @@ router.get("/recommendation", async (req: Request, res: Response) => {
       }
     }
 
-    res.status(200).send(movieData);
+    res.status(200).send({ recommendations: movieData });
   } catch (e: any) {
     if (axios.isAxiosError(e)) {
       if (e.message === ERROR_FETCHING_MOVIE_INFORMATION) {
