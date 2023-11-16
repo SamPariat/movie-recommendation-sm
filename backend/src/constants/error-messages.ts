@@ -12,4 +12,7 @@ export enum ErrorMessages {
   NoReviewProvided = "No review provided",
   ErrorFetchingTrendingMovies = "Error fetching trending movies",
   ErrorFetchingReviews = "Error fetching reviews",
+  NoSentimentProvided = "No sentiment provided",
+  ReviewServiceUnavailable = "Review service unavailable",
+  ModelServiceUnavailable = "Model service unavailable",
 }

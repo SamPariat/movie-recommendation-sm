@@ -54,6 +54,10 @@ router.get("/recommendation", async (req: Request, res: Response) => {
       return res
         .status(HttpStatus.BadRequest)
         .send({ error: ErrorMessages.MovieDoesNotExist });
+    } else if (response.status === 500) {
+      return res
+        .status(HttpStatus.ServiceUnavailable)
+        .send({ error: ErrorMessages.ModelServiceUnavailable });
     }
 
     const predictedMovies: { id: number; title: string }[] = response.data;

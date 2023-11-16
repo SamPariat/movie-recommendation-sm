@@ -1,14 +1,14 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { Request, Response, Router } from "express";
 
 import { ErrorMessages, HttpStatus } from "../constants";
+import { ErrorFetchingReviewSentiment, ModelServerError } from "../errors";
 import authCheck from "../middleware/auth-check";
 import MovieReview from "../models/movie-review";
-import { IMovieUser } from "../models/movie-user";
+import { type IMovieUser } from "../models/movie-user";
+import { saveReview } from "../utils";
 
 const router = Router();
-
-const modelBaseUrl = process.env.MODEL_BASE_URL;
 
 router.get(
   "/get-reviews/:movie",
@@ -43,41 +43,26 @@ router.post(
   async (req: Request, res: Response) => {
     const review = req.query.review;
 
-    try {
-      if (!review) {
-        return res
-          .status(HttpStatus.BadRequest)
-          .send({ error: ErrorMessages.NoReviewProvided });
-      }
+    if (!review) {
+      return res
+        .status(HttpStatus.BadRequest)
+        .send({ error: ErrorMessages.NoReviewProvided });
+    }
 
+    try {
       const user = req.user as IMovieUser;
       const movie = req.params.movie as string;
 
-      const response = await axios.get<{ sentiment: string }>(
-        `${modelBaseUrl}/sentiment?review=${review}`
-      );
-
-      if (response.status === 500) {
-        return res
-          .status(HttpStatus.InternalServerError)
-          .send({ error: ErrorMessages.ErrorFetchingSentiment });
-      }
-
-      const { sentiment } = response.data;
-
-      const newReview = new MovieReview({
-        review,
-        sentiment,
-        movie,
-        movieUser: user?._id,
-      });
-
-      await newReview.save();
+      const newReview = await saveReview(review as string, user._id, movie);
 
       return res.status(HttpStatus.Created).send(newReview);
     } catch (e) {
-      if (e instanceof AxiosError) {
-        return res.status(HttpStatus.BadRequest).send({ error: e.message });
+      if (e instanceof ModelServerError) {
+        return res.status(HttpStatus.InternalServerError).send();
+      } else if (e instanceof ErrorFetchingReviewSentiment) {
+        return res
+          .status(HttpStatus.ServiceUnavailable)
+          .send({ error: e.message });
       }
       res.status(HttpStatus.InternalServerError).send();
     }
