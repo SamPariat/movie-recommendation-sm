@@ -21,7 +21,7 @@ export interface CastInfo {
   director: Omit<PersonInfo, "character">[];
 }
 
-export interface TrendingInfo extends Omit<MovieCommonDetails, "tagline"> {
+export interface TrendingInfo extends MovieCommonDetails {
   id: number;
   title: string;
 }

@@ -36,7 +36,7 @@ const HomePage = () => {
               color="secondary"
               fontWeight={700}
             >
-              Recommended Movies For You
+              Top 5 Trending Movies
             </Typography>
           </Grid>
           <Grid item>

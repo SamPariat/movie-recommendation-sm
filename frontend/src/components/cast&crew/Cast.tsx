@@ -17,7 +17,7 @@ const Cast = () => {
       <Typography
         variant="h3"
         color="secondary.main"
-        textAlign="left"
+        textAlign="center"
         pl={4}
         pt={4}
         pb={5}
@@ -28,7 +28,7 @@ const Cast = () => {
       <Grid container justifyContent="center" lg={12}>
         <MovieGrids />
       </Grid>
-      <Typography color="secondary.main" fontWeight="bold" variant="h4" py={4}>
+      <Typography color="secondary.main" fontWeight="bold" variant="h4" py={4} textAlign="center">
         Director
       </Typography>
       {/* Director */}

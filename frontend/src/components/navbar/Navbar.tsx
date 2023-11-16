@@ -13,8 +13,14 @@ import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import NavButtons from "./NavButtons";
 import SettingsMenu from "./SettingsMenu";
+import { Link } from "react-router-dom";
 
-const pages = ["Home", "About", "Login"];
+// const pages = ["Home", "About", "Login"];
+const pages = [
+  { id: "home-button", title: "Home", to: "/" },
+  { id: "about-button", title: "About", to: "/about" },
+  { id: "login-button", title: "Log In", to: "/login" },
+];
 
 export const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -82,14 +88,16 @@ export const Navbar = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography
-                    fontWeight={700}
-                    color="secondary"
-                    textAlign="center"
-                  >
-                    {page}
-                  </Typography>
+                <MenuItem key={page.id} onClick={handleCloseNavMenu}>
+                  <Link to={page.to} style={{ textDecoration: "none" }}>
+                    <Typography
+                      fontWeight={700}
+                      color="secondary"
+                      textAlign="center"
+                    >
+                      {page.title}
+                    </Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
