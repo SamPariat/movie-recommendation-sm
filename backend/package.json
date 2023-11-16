@@ -29,6 +29,7 @@
     "passport": "^0.6.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-local": "^1.0.0",
+    "redis": "^4.6.10",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },

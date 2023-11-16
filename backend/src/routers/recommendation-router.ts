@@ -1,55 +1,89 @@
 import axios from "axios";
 import { Request, Response, Router } from "express";
 
+import { ErrorMessages, HttpStatus } from "../constants";
 import {
-  ERROR_FETCHING_MOVIE_INFORMATION,
-  INTERNAL_SERVER_ERROR,
-  MOVIE_DOES_NOT_EXIST,
-  NO_MOVIE_PROVIDED,
-} from "../constants";
-import { MovieInfo, getMovieInformationById } from "../utils/movie-utils";
+  ErrorFetchingMovieInformation,
+  InvalidMovieIdError,
+  MovieDoesNotExistError,
+  UnauthorizedError,
+} from "../errors";
+import { type MovieData } from "../types";
+import {
+  getMovieInformationById,
+  retrieveRedisJson,
+  storeRedisJson,
+} from "../utils";
 
 const router = Router();
 
-interface MovieData extends MovieInfo {
-  title: string;
-}
+const modelBaseUrl = process.env.MODEL_BASE_URL;
 
 router.get("/recommendation", async (req: Request, res: Response) => {
+  const path = "$";
+  let redisRecommendationPath = "recommendation:";
+
   try {
     const movie = req.query.movie;
 
     if (!movie) {
-      return res.status(400).send({ error: NO_MOVIE_PROVIDED });
+      return res
+        .status(HttpStatus.BadRequest)
+        .send({ error: ErrorMessages.NoMovieProvided });
+    }
+
+    redisRecommendationPath += movie.toString();
+
+    const cachedRecommendations = await retrieveRedisJson(
+      redisRecommendationPath,
+      path
+    );
+
+    if (cachedRecommendations) {
+      // Speeds up the request from appropriately 1400ms to 170ms (87.86%)
+      res
+        .status(HttpStatus.Ok)
+        .send({ recommendations: cachedRecommendations });
     }
 
     const response = await axios.get(
-      `${process.env.MODEL_BASE_URL}/movie-prediction?movie=${movie}`
+      `${modelBaseUrl}/movie-prediction?movie=${movie}`
     );
 
     if (response.status === 400) {
-      return res.status(400).send({ error: MOVIE_DOES_NOT_EXIST });
+      return res
+        .status(HttpStatus.BadRequest)
+        .send({ error: ErrorMessages.MovieDoesNotExist });
     }
 
     const predictedMovies: { id: number; title: string }[] = response.data;
-    const movieData: MovieData[] = [];
 
-    for (const movie of predictedMovies) {
-      const movieInfo = await getMovieInformationById(movie.id);
+    // Generate promises for each of the predicted movies
+    const movieInfoPromise = predictedMovies.map(async (pred) => {
+      const movieInfo = await getMovieInformationById(pred.id);
+      return movieInfo ? { ...movieInfo, title: pred.title } : null;
+    });
 
-      if (movieInfo) {
-        movieData.push({ ...movieInfo, title: movie.title });
-      }
+    // Run all the predictions in parallel to each other
+    // and then filter out the null predictions
+    const movieData = (await Promise.all(movieInfoPromise)).filter(
+      (pred) => pred !== null
+    ) as MovieData[];
+
+    await storeRedisJson(redisRecommendationPath, path, movieData);
+
+    res.status(HttpStatus.Ok).send({ recommendations: movieData });
+  } catch (e) {
+    if (e instanceof UnauthorizedError) {
+      return res.status(HttpStatus.Unauthorized).send({ error: e.message });
+    } else if (e instanceof InvalidMovieIdError) {
+      return res.status(HttpStatus.BadRequest).send({ error: e.message });
+    } else if (e instanceof MovieDoesNotExistError) {
+      return res.status(HttpStatus.NotFound).send({ error: e.message });
+    } else if (e instanceof ErrorFetchingMovieInformation) {
+      return res.status(HttpStatus.BadRequest).send({ error: e.message });
     }
-
-    res.status(200).send({ recommendations: movieData });
-  } catch (e: any) {
-    if (axios.isAxiosError(e)) {
-      if (e.message === ERROR_FETCHING_MOVIE_INFORMATION) {
-        return res.status(400).send({ error: MOVIE_DOES_NOT_EXIST });
-      }
-    }
-    res.status(500).send({ error: INTERNAL_SERVER_ERROR });
+    res.status(HttpStatus.InternalServerError).send();
   }
 });
 

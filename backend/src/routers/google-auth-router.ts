@@ -1,13 +1,15 @@
 import { NextFunction, Request, Response, Router } from "express";
 import passport from "passport";
 
-import { UNABLE_TO_AUTHENTICATE } from "../constants";
+import { ErrorMessages, HttpStatus } from "../constants";
 
 const router = Router();
 
 // Google OAuth Login
 router.get("/login-fail", async (req: Request, res: Response) => {
-  res.status(401).send({ message: UNABLE_TO_AUTHENTICATE });
+  res
+    .status(HttpStatus.Unauthorized)
+    .send({ message: ErrorMessages.UnableToAuthenticate });
 });
 
 // Google OAuth Logout
@@ -18,7 +20,7 @@ router.get(
       if (error) {
         return next(error);
       }
-      res.status(200).send();
+      res.status(HttpStatus.Ok).send();
     });
   }
 );

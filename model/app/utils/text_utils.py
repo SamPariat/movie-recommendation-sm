@@ -1,6 +1,9 @@
 import re
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
+from nltk import download
+
+download('stopwords')
 
 
 class TextUtils:

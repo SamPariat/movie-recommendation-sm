@@ -1,8 +1,8 @@
+import * as argon from "argon2";
 import { NextFunction, Request, Response, Router } from "express";
 import passport from "passport";
-import * as argon from "argon2";
 
-import { INVALID_CREDENTIALS } from "../constants";
+import { ErrorMessages, HttpStatus } from "../constants";
 import MovieUser from "../models/movie-user";
 
 const router = Router();
@@ -16,7 +16,9 @@ router.post("/signup", async (req: Request, res: Response) => {
     });
 
     if (movieUser) {
-      res.status(403).send({ error: INVALID_CREDENTIALS });
+      res
+        .status(HttpStatus.Forbidden)
+        .send({ error: ErrorMessages.InvalidCredentials });
     }
 
     const hashedPassword = await argon.hash(password);
@@ -28,9 +30,9 @@ router.post("/signup", async (req: Request, res: Response) => {
     });
 
     await newMovieUser.save();
-    res.status(201).send();
+    res.status(HttpStatus.Created).send();
   } catch (e) {
-    res.status(500).send();
+    res.status(HttpStatus.InternalServerError).send();
   }
 });
 
@@ -39,9 +41,9 @@ router.post(
   passport.authenticate("local", { failureRedirect: "/auth/local/login" }),
   (req: Request, res: Response) => {
     try {
-      res.status(200).send({ user: req.user });
+      res.status(HttpStatus.Ok).send({ user: req.user });
     } catch (e) {
-      res.status(500).send();
+      res.status(HttpStatus.InternalServerError).send();
     }
   }
 );
@@ -54,7 +56,7 @@ router.post(
         return next(error);
       }
     });
-    res.status(200).send();
+    res.status(HttpStatus.Ok).send();
   }
 );
 
