@@ -28,11 +28,11 @@ export const getMovieInformationById = async (
     const movieData = response.data;
 
     return {
-      title: movieData["original_title"],
-      adult: movieData["adult"],
-      imagePath: "https://image.tmdb.org/t/p/w185" + movieData["poster_path"],
-      tagline: movieData["tagline"],
-      overview: movieData["overview"],
+      title: movieData.original_title,
+      adult: movieData.adult,
+      imagePath: "https://image.tmdb.org/t/p/w185" + movieData.poster_path,
+      tagline: movieData.tagline,
+      overview: movieData.overview,
     };
   } catch (e) {
     if (e instanceof AxiosError) {

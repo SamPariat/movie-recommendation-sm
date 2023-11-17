@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "934759767007",
+    "firebase_url": "https://movie-recommendation-sm-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "movie-recommendation-sm",
+    "storage_bucket": "movie-recommendation-sm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:934759767007:android:e91c1364de6683da9ac26a",
+        "android_client_info": {
+          "package_name": "com.example.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmSE16c8hJo7BgWkxIa9BSxTaoiFXpvgc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
