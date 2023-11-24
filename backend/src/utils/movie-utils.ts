@@ -9,8 +9,6 @@ import {
 } from "../errors";
 import { type CastInfo, type MovieInfo, type TrendingInfo } from "../types";
 
-const tmdbApiKey = process.env.TMDB_API_KEY;
-
 export const getMovieInformationById = async (
   movieId: number
 ): Promise<MovieInfo | null> => {
@@ -19,7 +17,7 @@ export const getMovieInformationById = async (
       `https://api.themoviedb.org/3/movie/${movieId}`,
       {
         headers: {
-          Authorization: "Bearer " + tmdbApiKey,
+          Authorization: "Bearer " + process.env.TMDB_API_KEY,
           Accept: "application/json",
         },
       }
@@ -64,7 +62,7 @@ export const getMovieCastById = async (
       `https://api.themoviedb.org/3/movie/${movieId}/credits`,
       {
         headers: {
-          Authorization: "Bearer " + tmdbApiKey,
+          Authorization: "Bearer " + process.env.TMDB_API_KEY,
           Accept: "application/json",
         },
       }
@@ -117,7 +115,7 @@ export const getTop5Trending = async (): Promise<TrendingInfo[] | null> => {
       "https://api.themoviedb.org/3/trending/movie/day?language=en-US",
       {
         headers: {
-          Authorization: "Bearer " + tmdbApiKey,
+          Authorization: "Bearer " + process.env.TMDB_API_KEY,
           Accept: "application/json",
         },
       }
@@ -154,7 +152,7 @@ export const getLatestTrendingMovie =
         "https://api.themoviedb.org/3/trending/movie/day?language=en-US",
         {
           headers: {
-            Authorization: "Bearer " + tmdbApiKey,
+            Authorization: "Bearer " + process.env.TMDB_API_KEY,
             Accept: "application/json",
           },
         }

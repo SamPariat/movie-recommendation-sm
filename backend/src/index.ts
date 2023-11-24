@@ -14,6 +14,7 @@ import movieRouter from "./routers/movie-router";
 import profileRouter from "./routers/profile-router";
 import recommendationRouter from "./routers/recommendation-router";
 import sentimentRouter from "./routers/sentiment-router";
+import { errorHandler } from "./middleware/errors";
 
 const app = express();
 
@@ -53,6 +54,7 @@ app.use("/auth/local", localAuthRouter); // Use the local auth router
 app.use("/profile", profileRouter); // Use the profile's router
 app.use("/sentiment", sentimentRouter); // Use the sentiment router
 app.use("/movie", movieRouter); // Use the movie router
+app.use(errorHandler); // Use the global error handler
 
 app.listen(PORT, async () => {
   try {

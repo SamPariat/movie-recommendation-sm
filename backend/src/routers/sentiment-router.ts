@@ -1,8 +1,8 @@
 import { AxiosError } from "axios";
-import { Request, Response, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 
 import { ErrorMessages, HttpStatus } from "../constants";
-import { ErrorFetchingReviewSentiment, ModelServerError } from "../errors";
+import { ErrorFetchingReviews, QueryInvalidError } from "../errors";
 import authCheck from "../middleware/auth-check";
 import MovieReview from "../models/movie-review";
 import { type IMovieUser } from "../models/movie-user";
@@ -13,11 +13,15 @@ const router = Router();
 router.get(
   "/get-reviews/:movie",
   authCheck,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
       const movie = req.params.movie;
+
+      if (!movie) {
+        throw new QueryInvalidError(ErrorMessages.NoMovieProvided);
+      }
 
       const reviews = await MovieReview.find({
         movie,
@@ -28,11 +32,10 @@ router.get(
       return res.json({ reviews });
     } catch (e) {
       if (e instanceof AxiosError) {
-        return res
-          .status(HttpStatus.BadRequest)
-          .send({ error: ErrorMessages.ErrorFetchingReviews });
+        next(new ErrorFetchingReviews(ErrorMessages.ErrorFetchingReviews));
       }
-      res.status(HttpStatus.InternalServerError).send();
+
+      next(e);
     }
   }
 );
@@ -40,7 +43,7 @@ router.get(
 router.post(
   "/save-review/:movie",
   authCheck,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const review = req.query.review;
 
     if (!review) {
@@ -57,14 +60,7 @@ router.post(
 
       return res.status(HttpStatus.Created).send(newReview);
     } catch (e) {
-      if (e instanceof ModelServerError) {
-        return res.status(HttpStatus.InternalServerError).send();
-      } else if (e instanceof ErrorFetchingReviewSentiment) {
-        return res
-          .status(HttpStatus.ServiceUnavailable)
-          .send({ error: e.message });
-      }
-      res.status(HttpStatus.InternalServerError).send();
+      next(e);
     }
   }
 );

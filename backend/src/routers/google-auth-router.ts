@@ -20,7 +20,7 @@ router.get(
       if (error) {
         return next(error);
       }
-      res.status(HttpStatus.Ok).send();
+      res.send();
     });
   }
 );

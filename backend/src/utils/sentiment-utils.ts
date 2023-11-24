@@ -2,7 +2,11 @@ import axios, { AxiosError } from "axios";
 import mongoose from "mongoose";
 
 import { ErrorMessages } from "../constants";
-import { ErrorFetchingReviewSentiment, ModelServerError } from "../errors";
+import {
+  ErrorFetchingReviewSentiment,
+  ModelServerError,
+  NoReviewProvidedError,
+} from "../errors";
 import MovieReview, { type IMovieReview } from "../models/movie-review";
 
 const modelBaseUrl = process.env.MODEL_BASE_URL;
@@ -16,10 +20,6 @@ export const saveReview = async (
     const response = await axios.get<{ sentiment: "Positive" | "Negative" }>(
       `${modelBaseUrl}/sentiment?review=${review}`
     );
-
-    if (response.status === 500) {
-      throw new ModelServerError(ErrorMessages.ErrorFetchingSentiment);
-    }
 
     const { sentiment } = response.data;
 
@@ -35,9 +35,15 @@ export const saveReview = async (
     return newReview;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw new ErrorFetchingReviewSentiment(
-        ErrorMessages.ErrorFetchingSentiment
-      );
+      if (e.response?.status === 400) {
+        throw new NoReviewProvidedError(ErrorMessages.NoReviewProvided);
+      } else if (e.response?.status === 500) {
+        throw new ErrorFetchingReviewSentiment(
+          ErrorMessages.ErrorFetchingSentiment
+        );
+      } else {
+        throw new ModelServerError(ErrorMessages.ErrorFetchingSentiment);
+      }
     }
 
     return null;

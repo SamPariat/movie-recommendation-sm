@@ -1,4 +1,4 @@
-export class MovieDoesNotExistError extends Error {
+export class NoReviewProvidedError extends Error {
   message: string;
   name: string;
 
@@ -6,6 +6,6 @@ export class MovieDoesNotExistError extends Error {
     super(message);
 
     this.message = message;
-    this.name = "MovieDoesNotExistError";
+    this.name = "NoReviewProvidedError";
   }
 }
