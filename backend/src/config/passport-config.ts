@@ -10,6 +10,9 @@ type PassportUser = {
   _id?: string;
 };
 
+/**
+ * Sets up the Google OAuth 2.0 and Local strategy
+ */
 export const passportConfig = () => {
   passport.serializeUser(async (user: PassportUser, done) => {
     done(null, user._id);

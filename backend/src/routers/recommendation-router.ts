@@ -16,8 +16,16 @@ import {
 
 const router = Router();
 
-const modelBaseUrl = process.env.MODEL_BASE_URL;
-
+/**
+ * @path GET /model/recommendation/:movie
+ * @summary Retrieve recommendations
+ * @param {string} movie The title of the movie for which recommendations are to be retrieved
+ * @returns {Object} The array of recommendations
+ * @description Retrieves a list of recommendations based on the specified movie
+ * @throws {QueryInvalidError} If no movie is provided
+ * @throws {MovieDoesNotExistError} If the movie does not exist
+ * @throws {ModelServerError} If the Flask backend is not working
+ */
 router.get(
   "/recommendation",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -44,7 +52,7 @@ router.get(
       }
 
       const response = await axios.get(
-        `${modelBaseUrl}/movie-prediction?movie=${movie}`
+        `${process.env.MODEL_BASE_URL}/movie-prediction?movie=${movie}`
       );
 
       const predictedMovies: { id: number; title: string }[] = response.data;

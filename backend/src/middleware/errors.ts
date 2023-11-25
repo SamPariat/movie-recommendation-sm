@@ -44,8 +44,10 @@ export const errorHandler = (
       return res.status(HttpStatus.InternalServerError).send();
 
     // "503"
+    case error instanceof errors.ErrorFetchingCast:
     case error instanceof errors.ErrorFetchingMovieInformation:
     case error instanceof errors.ErrorFetchingReviewSentiment:
+    case error instanceof errors.ErrorFetchingTrendingInfo:
     case error instanceof errors.ModelServerError:
       return res.status(HttpStatus.ServiceUnavailable).send();
 

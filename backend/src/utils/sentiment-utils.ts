@@ -9,16 +9,14 @@ import {
 } from "../errors";
 import MovieReview, { type IMovieReview } from "../models/movie-review";
 
-const modelBaseUrl = process.env.MODEL_BASE_URL;
-
 export const saveReview = async (
   review: string,
   userId: mongoose.Types.ObjectId,
   movie: string
-): Promise<IMovieReview | null> => {
+): Promise<IMovieReview> => {
   try {
     const response = await axios.get<{ sentiment: "Positive" | "Negative" }>(
-      `${modelBaseUrl}/sentiment?review=${review}`
+      `${process.env.MODEL_BASE_URL}/sentiment?review=${review}`
     );
 
     const { sentiment } = response.data;
@@ -46,6 +44,6 @@ export const saveReview = async (
       }
     }
 
-    return null;
+    throw e;
   }
 };

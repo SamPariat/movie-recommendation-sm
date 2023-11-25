@@ -15,4 +15,6 @@ export enum ErrorMessages {
   NoSentimentProvided = "No sentiment provided",
   ReviewServiceUnavailable = "Review service unavailable",
   ModelServiceUnavailable = "Model service unavailable",
+  ErrorFetchingCastInformation = "Error fetching cast information",
+  ErrorFetchingTrendingInformation = "Error fetching trending information",
 }
