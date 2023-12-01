@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
+import { UnauthorizedError } from "../errors";
+
 /**
  * A middleware function that checks if the user is authenticated
  * @param req Express request object
@@ -10,7 +12,7 @@ import { NextFunction, Request, Response } from "express";
 const authCheck = (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     // If the user is not logged in
-    return res.status(401).send({ message: "Not authenticated..." });
+    throw new UnauthorizedError("Not authenticated...");
   } else {
     // If the user is logged in
     next();
