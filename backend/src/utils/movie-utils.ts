@@ -34,9 +34,13 @@ export const getMovieInformationById = async (
     return {
       title: movieData.original_title,
       adult: movieData.adult,
-      imagePath: "https://image.tmdb.org/t/p/w185" + movieData.poster_path,
+      imagePath: "https://image.tmdb.org/t/p/w500" + movieData.poster_path,
       tagline: movieData.tagline,
       overview: movieData.overview,
+      genres: movieData.genres.map(
+        (genre: { id: number; name: string }) => genre.name
+      ),
+      releaseDate: movieData.release_date,
     };
   } catch (e) {
     if (e instanceof AxiosError) {
@@ -82,7 +86,7 @@ export const getMovieCastById = async (movieId: number): Promise<CastInfo> => {
       castInfo.actors?.push({
         name: cast[i].original_name,
         character: cast[i].character,
-        imagePath: "https://image.tmdb.org/t/p/w185" + cast[i].profile_path,
+        imagePath: "https://image.tmdb.org/t/p/w500" + cast[i].profile_path,
       });
     }
 
@@ -91,7 +95,7 @@ export const getMovieCastById = async (movieId: number): Promise<CastInfo> => {
         castInfo.director.push({
           name: crewMember.name,
           imagePath:
-            "https://image.tmdb.org/t/p/w185" + crewMember.profile_path,
+            "https://image.tmdb.org/t/p/w500" + crewMember.profile_path,
         });
         break;
       }

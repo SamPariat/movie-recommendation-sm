@@ -10,6 +10,8 @@ interface MovieCommonDetails extends CommonDetails {
 export interface MovieInfo extends MovieCommonDetails {
   overview: string;
   title: string;
+  genres: string[];
+  releaseDate: string;
 }
 
 interface PersonInfo extends CommonDetails {
