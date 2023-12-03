@@ -129,7 +129,7 @@ export const Navbar = () => {
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
                   sx={{ bgcolor: "secondary.main" }}
-                  alt="Aviral Kaushal"
+                  alt={localStorage.getItem('name') as string}
                   src="/static/images/avatar/2.jpg"
                 />
               </IconButton>

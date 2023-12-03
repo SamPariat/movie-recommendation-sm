@@ -2,6 +2,7 @@ import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 import api from "../../api";
 
@@ -15,6 +16,7 @@ interface MovieOption {
  * A search list that fetches movies from the backend (about 5000)
  */
 const SearchList = () => {
+  const navigate = useNavigate();
   const fetchAllMovies = async () => {
     const response = await api<{ dicc_arr: MovieOption[] }>(
       "GET",
@@ -49,8 +51,18 @@ const SearchList = () => {
         disablePortal
         blurOnSelect="mouse"
         options={data}
+        autoHighlight={true}
         renderOption={(props, option) => (
-          <li {...props} key={option.id}>
+          <li
+            {...props}
+            key={option.id}
+            onClick={() => navigate(`reviews/${option.id}`)}
+            // onKeyDown={(e) => {
+            //   if (e.key === "Enter") {
+            //     navigate(`reviews/${option.id}`);
+            //   }
+            // }}
+          >
             {option.title}
           </li>
         )}

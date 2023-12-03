@@ -19,7 +19,7 @@ function PopUpButton() {
         color="secondary"
         label="Review"
         multiline
-        rows={10}
+        rows={5}
         fullWidth
         value={inputValue}
         onChange={handleInputChange}

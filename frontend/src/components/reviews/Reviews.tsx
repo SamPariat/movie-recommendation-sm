@@ -5,9 +5,11 @@ import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
 
 // import Gridsplit from "../homepage/GridSplit";
-import NotUserReviewsButton from "./NotUserReviewsButton";
+// import NotUserReviewsButton from "./NotUserReviewsButton";
 // import { TextField } from "@mui/material";
 import PopUpButton from "./PopUpButton";
+import DynamicReviews from "./DynamicReviews";
+import NotUserReviewsButton from "./NotUserReviewsButton";
 
 const Reviews = () => {
   const location = useParams();
@@ -20,7 +22,8 @@ const Reviews = () => {
       minHeight="100vh"
     >
       <Grid container py={10}>
-        <NotUserReviewsButton />
+        <DynamicReviews />
+        {/* <NotUserReviewsButton/> */}
       </Grid>
       <Typography
         textAlign="left"
