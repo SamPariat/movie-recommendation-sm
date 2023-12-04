@@ -48,7 +48,7 @@ router.get(
 
       if (cachedRecommendations) {
         // Speeds up the request from appropriately 1400ms to 170ms (87.86%)
-        return res.send({ recommendations: cachedRecommendations });
+        return res.json({ recommendations: cachedRecommendations });
       }
 
       const response = await axios.get(
@@ -71,7 +71,7 @@ router.get(
 
       await storeRedisJson(redisRecommendationPath, path, movieData);
 
-      res.send({ recommendations: movieData });
+      res.json({ recommendations: movieData });
     } catch (e) {
       if (e instanceof AxiosError) {
         if (e.response?.status === 400) {

@@ -90,7 +90,7 @@ router.post(
 
       const newReview = await saveReview(review as string, user._id, movie);
 
-      return res.status(HttpStatus.Created).send(newReview);
+      return res.status(HttpStatus.Created).json(newReview);
     } catch (e) {
       next(e);
     }

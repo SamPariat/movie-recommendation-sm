@@ -8,6 +8,14 @@ import MovieUser from "../models/movie-user";
 
 const router = Router();
 
+/**
+ * @path GET /auth/local/signup
+ * @summary Sign up a user
+ * @description Allows the user to sign up using Passport Local
+ * @returns {Object} The signed up user
+ * @returns {403} If the user already exists
+ * @throws {InternalServerError} If some error occurs
+ */
 router.post(
   "/signup",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -21,7 +29,7 @@ router.post(
       if (movieUser) {
         res
           .status(HttpStatus.Forbidden)
-          .send({ error: ErrorMessages.InvalidCredentials });
+          .json({ error: ErrorMessages.InvalidCredentials });
       }
 
       const hashedPassword = await argon.hash(password);
@@ -33,25 +41,38 @@ router.post(
       });
 
       await newMovieUser.save();
-      res.status(HttpStatus.Created).send();
+
+      res.status(HttpStatus.Created).json(newMovieUser);
     } catch (e) {
       next(new InternalServerError(ErrorMessages.InternalServerError));
     }
   }
 );
 
+/**
+ * @path GET /auth/local/login
+ * @summary Log in a user
+ * @description Allows the user to log in using Passport Local
+ * @returns {Object} The logged in user
+ * @throws {InternalServerError} If some error occurs
+ */
 router.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/auth/local/login" }),
   (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.send({ user: req.user });
+      res.json(req.user);
     } catch (e) {
       next(new InternalServerError(ErrorMessages.InternalServerError));
     }
   }
 );
 
+/**
+ * @path GET /auth/local/logout
+ * @summary Log out a user
+ * @description Allows the user to logout
+ */
 router.post(
   "/logout",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -60,7 +81,7 @@ router.post(
         return next(error);
       }
     });
-    res.send();
+    res.json();
   }
 );
 

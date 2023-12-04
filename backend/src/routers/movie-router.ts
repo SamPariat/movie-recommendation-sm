@@ -44,7 +44,7 @@ router.get("/info", async (req: Request, res: Response, next: NextFunction) => {
 
     const movieInfo = await getMovieInformationById(+id);
 
-    res.send(movieInfo);
+    res.json(movieInfo);
   } catch (e) {
     next(e);
   }
@@ -71,7 +71,7 @@ router.get("/cast", async (req: Request, res: Response, next: NextFunction) => {
 
     const castInfo = await getMovieCastById(+id);
 
-    res.send(castInfo);
+    res.json(castInfo);
   } catch (e) {
     next(e);
   }
@@ -94,7 +94,7 @@ router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
 
     if (cachedMovies) {
       // Speeds up the request from appropriately 2000ms to 650ms (67.5%)
-      return res.send({ dicc_arr: cachedMovies });
+      return res.json({ dicc_arr: cachedMovies });
     }
 
     const response = await axios.get(`${modelBaseUrl}/all-movies`);
@@ -108,7 +108,7 @@ router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
 
     await storeRedisJson(redisMoviePath, path, allMovies.dicc_arr);
 
-    res.send(allMovies);
+    res.json(allMovies);
   } catch (e) {
     next(e);
   }
@@ -129,7 +129,7 @@ router.get(
     try {
       const latestTrending = await getLatestTrendingMovie();
 
-      res.send(latestTrending);
+      res.json(latestTrending);
     } catch (e) {
       next(e);
     }
@@ -151,7 +151,7 @@ router.get(
     try {
       const top5Trending = await getTop5Trending();
 
-      return res.send({ top5Trending });
+      return res.json({ top5Trending });
     } catch (e) {
       next(e);
     }
