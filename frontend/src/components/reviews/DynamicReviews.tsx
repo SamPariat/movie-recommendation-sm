@@ -10,11 +10,12 @@ import type { MovieInfo, TrendingInfo } from "../../types/movie";
 
 const NotUserReviewsButton = () => {
   const params = useParams();
-//   console.log(params);
+  //   console.log(params);
   const fetchMovieInfo = async () => {
     const response = await api<MovieInfo | null>(
       "get",
       `/movie/info?id=${params.movieId}`,
+      null,
       null
     );
     return response.data;
@@ -52,7 +53,13 @@ const NotUserReviewsButton = () => {
           >
             {data?.title}
           </Typography>
-          <Typography ml={0.3} gutterBottom textAlign="left" fontSize={13} mb={1}>
+          <Typography
+            ml={0.3}
+            gutterBottom
+            textAlign="left"
+            fontSize={13}
+            mb={1}
+          >
             {new Date(data?.releaseDate as string).getFullYear()}
           </Typography>
           <Grid container columnSpacing={2} pl={0.4}>

@@ -21,6 +21,7 @@ const SearchList = () => {
     const response = await api<{ dicc_arr: MovieOption[] }>(
       "GET",
       "/movie/all",
+      null,
       null
     );
 
@@ -56,7 +57,11 @@ const SearchList = () => {
           <li
             {...props}
             key={option.id}
-            onClick={() => navigate(`reviews/${option.id}`)}
+            onClick={() =>
+              navigate(`reviews/${option.id}`, {
+                state: { name: option.title },
+              })
+            }
             // onKeyDown={(e) => {
             //   if (e.key === "Enter") {
             //     navigate(`reviews/${option.id}`);

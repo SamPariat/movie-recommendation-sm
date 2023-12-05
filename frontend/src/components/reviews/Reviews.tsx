@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import PopUpButton from "./PopUpButton";
 import DynamicReviews from "./DynamicReviews";
 import NotUserReviewsButton from "./NotUserReviewsButton";
+import ReviewGrids from "./ReviewGrids";
 
 const Reviews = () => {
   const location = useParams();
@@ -22,8 +23,24 @@ const Reviews = () => {
       minHeight="100vh"
     >
       <Grid container py={10}>
-        <DynamicReviews />
-        {/* <NotUserReviewsButton/> */}
+        <Grid item>
+          <DynamicReviews />
+          {/* <NotUserReviewsButton/> */}
+        </Grid>
+        <Grid item pt={5}>
+          <Typography
+            textAlign="left"
+            px={10}
+            color="secondary.main"
+            variant="h5"
+            fontWeight="bold"
+          >
+            Top 5 Recommended Movies
+          </Typography>
+        </Grid>
+        <Grid item pt={5} pl={2}>
+          <ReviewGrids />
+        </Grid>
       </Grid>
       <Typography
         textAlign="left"
