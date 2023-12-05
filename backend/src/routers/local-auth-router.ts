@@ -27,7 +27,7 @@ router.post(
       });
 
       if (movieUser) {
-        res
+        return res
           .status(HttpStatus.Forbidden)
           .json({ error: ErrorMessages.InvalidCredentials });
       }

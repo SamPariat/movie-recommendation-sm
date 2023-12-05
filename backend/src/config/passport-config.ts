@@ -4,7 +4,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import * as argon from "argon2";
 
 import MovieUser from "../models/movie-user";
-import { INVALID_CREDENTIALS, UNAUTHORIZED } from "../constants";
+import { ErrorMessages } from "../constants";
 
 type PassportUser = {
   _id?: string;
@@ -15,14 +15,22 @@ type PassportUser = {
  */
 export const passportConfig = () => {
   passport.serializeUser(async (user: PassportUser, done) => {
-    done(null, user._id);
+    console.log("Serializing user");
+    return done(null, user._id);
   });
 
   passport.deserializeUser(async (id, done) => {
-    const movieUser = await MovieUser.findById(id);
+    console.log("Deserializing user");
+    try {
+      const movieUser = await MovieUser.findById(id);
 
-    if (movieUser) {
-      done(null, movieUser);
+      if (movieUser) {
+        return done(null, movieUser);
+      }
+
+      return done(ErrorMessages.UnableToAuthenticate, null);
+    } catch (e) {
+      return done(e, null);
     }
   });
 
@@ -49,12 +57,13 @@ export const passportConfig = () => {
             });
 
             await movieUser.save();
-            done(null, movieUser);
+
+            return done(null, movieUser);
           } else {
-            done(null, existingMovieUser);
+            return done(null, existingMovieUser);
           }
         } catch (e) {
-          throw e;
+          return done(e, undefined);
         }
       }
     )
@@ -80,15 +89,15 @@ export const passportConfig = () => {
             );
 
             if (!match) {
-              done(UNAUTHORIZED, undefined);
+              return done(ErrorMessages.Unauthorized, undefined);
             }
 
             return done(null, existingMovieUser);
           }
 
-          done(INVALID_CREDENTIALS, undefined);
+          return done(ErrorMessages.InvalidCredentials, undefined);
         } catch (e) {
-          throw e;
+          return done(e, undefined);
         }
       }
     )

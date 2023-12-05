@@ -15,6 +15,25 @@ import {
   type TrendingInfo,
 } from "../types";
 
+const getGenreObject = async (): Promise<Record<number, string>> => {
+  const response = await axios.get<{
+    genres: { id: number; name: string }[];
+  }>(`https://api.themoviedb.org/3/genre/movie/list`, {
+    headers: {
+      Authorization: "Bearer " + process.env.TMDB_API_KEY,
+      Accept: "application/json",
+    },
+  });
+
+  const { genres } = response.data;
+
+  const genresObject: Record<number, string> = {};
+
+  genres.forEach((genre) => (genresObject[genre.id] = genre.name));
+
+  return genresObject;
+};
+
 export const getMovieInformationById = async (
   movieId: number
 ): Promise<MovieInfo> => {
@@ -136,6 +155,8 @@ export const getTop5Trending = async (): Promise<TrendingInfo[]> => {
     const results = response.data.results;
     const trendingMovies: TrendingInfo[] = [];
 
+    const genresObject = await getGenreObject();
+
     for (let i = 1; i <= 5; i++) {
       trendingMovies.push({
         id: results[i].id,
@@ -143,6 +164,7 @@ export const getTop5Trending = async (): Promise<TrendingInfo[]> => {
         imagePath: "https://image.tmdb.org/t/p/w500" + results[i].poster_path,
         title: results[i].original_title,
         tagline: results[i].overview,
+        genres: results[i].genre_ids.map((id: number) => genresObject[id]),
       });
     }
 
@@ -182,12 +204,15 @@ export const getLatestTrendingMovie = async (): Promise<TrendingInfo> => {
 
     const results = response.data.results;
 
+    const genresObject = await getGenreObject();
+
     const latest: TrendingInfo = {
       id: results[0].id,
       adult: results[0].adult,
-      imagePath: "https://image.tmdb.org/t/p/w500" + results[0].poster_path,
+      imagePath: "https://image.tmdb.org/t/p/w1280" + results[0].poster_path,
       title: results[0].original_title,
       tagline: results[0].overview,
+      genres: results[0].genre_ids.map((id: number) => genresObject[id]),
     };
 
     return latest;
