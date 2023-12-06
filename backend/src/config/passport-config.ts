@@ -1,10 +1,10 @@
+import * as argon from "argon2";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { Strategy as LocalStrategy } from "passport-local";
-import * as argon from "argon2";
 
-import MovieUser from "../models/movie-user";
 import { ErrorMessages } from "../constants";
+import MovieUser from "../models/movie-user";
 
 type PassportUser = {
   _id?: string;
@@ -15,22 +15,16 @@ type PassportUser = {
  */
 export const passportConfig = () => {
   passport.serializeUser(async (user: PassportUser, done) => {
-    console.log("Serializing user");
+    console.log("Serializing user with id " + user._id);
     return done(null, user._id);
   });
 
   passport.deserializeUser(async (id, done) => {
-    console.log("Deserializing user");
-    try {
-      const movieUser = await MovieUser.findById(id);
+    console.log("Deserializing user with id " + id);
+    const movieUser = await MovieUser.findById(id);
 
-      if (movieUser) {
-        return done(null, movieUser);
-      }
-
-      return done(ErrorMessages.UnableToAuthenticate, null);
-    } catch (e) {
-      return done(e, null);
+    if (movieUser) {
+      return done(null, movieUser);
     }
   });
 
@@ -57,13 +51,12 @@ export const passportConfig = () => {
             });
 
             await movieUser.save();
-
             return done(null, movieUser);
           } else {
             return done(null, existingMovieUser);
           }
         } catch (e) {
-          return done(e, undefined);
+          throw e;
         }
       }
     )
@@ -89,15 +82,15 @@ export const passportConfig = () => {
             );
 
             if (!match) {
-              return done(ErrorMessages.Unauthorized, undefined);
+              return done(ErrorMessages.Unauthorized, false);
             }
 
             return done(null, existingMovieUser);
           }
 
-          return done(ErrorMessages.InvalidCredentials, undefined);
+          return done(ErrorMessages.InvalidCredentials, false);
         } catch (e) {
-          return done(e, undefined);
+          throw e;
         }
       }
     )

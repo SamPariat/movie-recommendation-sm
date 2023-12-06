@@ -45,9 +45,13 @@ const Login = () => {
 
         // Handle successful response
         console.log("Registration successful!", response.data);
-        localStorage.setItem('name', (response.data as any).user.name)
+
+        const profile = await request("GET", "/profile", null, {});
+        console.log(profile.data);
+
+        localStorage.setItem("name", (response.data as any).user.name);
         // You might want to redirect or perform other actions upon successful registration
-        navigate('/')
+        navigate("/");
       } catch (error) {
         // Handle error response
         console.error("Try Again. Data was not sent to Backend!", error);

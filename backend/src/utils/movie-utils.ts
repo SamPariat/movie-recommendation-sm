@@ -165,6 +165,7 @@ export const getTop5Trending = async (): Promise<TrendingInfo[]> => {
         title: results[i].original_title,
         tagline: results[i].overview,
         genres: results[i].genre_ids.map((id: number) => genresObject[id]),
+        releaseDate: results[i].release_date,
       });
     }
 
@@ -213,6 +214,7 @@ export const getLatestTrendingMovie = async (): Promise<TrendingInfo> => {
       title: results[0].original_title,
       tagline: results[0].overview,
       genres: results[0].genre_ids.map((id: number) => genresObject[id]),
+      releaseDate: results[0].release_date,
     };
 
     return latest;
