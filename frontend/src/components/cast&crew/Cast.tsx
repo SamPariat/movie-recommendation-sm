@@ -3,10 +3,30 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { useParams } from "react-router-dom";
 
-import MovieGrids from "../homepage/MovieGrids";
+// import MovieGrids from "../homepage/MovieGrids";
+import { CastInfo } from "../../types/movie";
+import api from '../../api'
+import { useQuery } from "@tanstack/react-query";
+import CastGrid from "./CastGrid";
 
 const Cast = () => {
+  const params = useParams();
+  const fetchCastInfo = async () => {
+    const response = await api<CastInfo | null>(
+      "get",
+      `/movie/cast?id=${params.movieId}`,
+      null
+    );
+    return response.data;
+  };
+
+  const { data } = useQuery<CastInfo | null>({
+    queryKey: ["cast info"],
+    queryFn: fetchCastInfo,
+  });
+
   return (
     <Box
       bgcolor="primary.main"
@@ -26,9 +46,15 @@ const Cast = () => {
         Cast & Crew
       </Typography>
       <Grid container justifyContent="center" lg={12}>
-        <MovieGrids />
+        <CastGrid info = {data}/>
       </Grid>
-      <Typography color="secondary.main" fontWeight="bold" variant="h4" py={4} textAlign="center">
+      <Typography
+        color="secondary.main"
+        fontWeight="bold"
+        variant="h4"
+        py={4}
+        textAlign="center"
+      >
         Director
       </Typography>
       {/* Director */}
@@ -40,7 +66,7 @@ const Cast = () => {
           >
             <Stack direction="column" />
             <img
-              src="https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg"
+              src={data?.director[0].imagePath}
               style={{
                 maxWidth: 250,
                 //   maxHeight: 300,
@@ -49,15 +75,7 @@ const Cast = () => {
               }}
             />
             <Typography pt={1} pl={1} textAlign="left" fontWeight={700}>
-              Intersteller
-            </Typography>
-            <Typography
-              pl={1}
-              textAlign="left"
-              fontSize={11}
-              color="secondary.main"
-            >
-              SciFi/Action
+              {data?.director[0].name}
             </Typography>
           </Paper>
         </Grid>

@@ -5,38 +5,31 @@ import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 // import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { CastInfo } from "../../types/movie";
 
 import api from "../../api";
 
-const MovieGrids = () => {
-  const fetchTop5Trending = async () => {
-    const response = await api<any>("get", "/movie/top-5-trending", null, null);
-    return response.data.top5Trending;
-  };
+type CastGridProps = {
+  info ?: CastInfo | null;
+};
 
-  const { data, status } = useQuery({
-    queryKey: ["top 5 trending"],
-    queryFn: fetchTop5Trending,
-  });
-
-  console.log(data);
-
+const CastGrid = ({info} : CastGridProps) => {
   if (status === "pending") {
     return <CircularProgress />;
   }
 
   return (
     <Grid container columnSpacing={5} rowSpacing={1} justifyContent="center">
-      {data &&
-        data.map((recommendation: any) => (
-          <Grid item key={recommendation.title}>
+      {info &&
+        info.actors.map((actor) => (
+          <Grid item key={actor.name}>
             <Paper
               elevation={3}
               sx={{ bgcolor: "primary.main", mb: 4, maxWidth: 250 }}
             >
               <Stack direction="column" justifyContent="center">
                 <img
-                  src={recommendation.imagePath}
+                  src={actor.imagePath}
                   style={{
                     width: 250,
                     borderTopLeftRadius: 5,
@@ -50,7 +43,15 @@ const MovieGrids = () => {
                   fontWeight={700}
                   noWrap
                 >
-                  {recommendation.title}
+                  {actor.name}
+                </Typography>
+                <Typography
+                  pl={1}
+                  textAlign="left"
+                  fontSize={11}
+                  color="secondary.main"
+                >
+                  {actor.character}
                 </Typography>
               </Stack>
             </Paper>
@@ -60,4 +61,4 @@ const MovieGrids = () => {
   );
 };
 
-export default MovieGrids;
+export default CastGrid;

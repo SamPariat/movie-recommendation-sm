@@ -5,18 +5,25 @@ import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 // import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
 
 import api from "../../api";
 
-const MovieGrids = () => {
-  const fetchTop5Trending = async () => {
-    const response = await api<any>("get", "/movie/top-5-trending", null, null);
-    return response.data.top5Trending;
+const ReviewGrids = () => {
+  const location = useLocation();
+  const fetchTop5Recommends = async () => {
+    const response = await api<any>(
+      "get",
+      `/model/recommendation?movie=${location.state.name}`,
+      null,
+      null
+    );
+    return response.data.recommendations;
   };
 
   const { data, status } = useQuery({
-    queryKey: ["top 5 trending"],
-    queryFn: fetchTop5Trending,
+    queryKey: ["top 5 recommends"],
+    queryFn: fetchTop5Recommends,
   });
 
   console.log(data);
@@ -37,6 +44,7 @@ const MovieGrids = () => {
               <Stack direction="column" justifyContent="center">
                 <img
                   src={recommendation.imagePath}
+                  alt={recommendation.title}
                   style={{
                     width: 250,
                     borderTopLeftRadius: 5,
@@ -60,4 +68,4 @@ const MovieGrids = () => {
   );
 };
 
-export default MovieGrids;
+export default ReviewGrids;

@@ -5,10 +5,13 @@ interface CommonDetails {
 interface MovieCommonDetails extends CommonDetails {
   adult: boolean;
   tagline: string;
+  genres: string[];
+  releaseDate: string;
 }
 
 export interface MovieInfo extends MovieCommonDetails {
   overview: string;
+  title: string;
 }
 
 interface PersonInfo extends CommonDetails {
@@ -23,5 +26,9 @@ export interface CastInfo {
 
 export interface TrendingInfo extends MovieCommonDetails {
   id: number;
+  title: string;
+}
+
+export interface MovieData extends MovieInfo {
   title: string;
 }

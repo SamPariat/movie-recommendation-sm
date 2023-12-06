@@ -13,6 +13,7 @@ const GridSplit = () => {
     const response = await api<TrendingInfo | null>(
       "get",
       "/movie/latest-trending",
+      null,
       null
     );
     return response.data;
@@ -51,42 +52,23 @@ const GridSplit = () => {
             {data?.title}
           </Typography>
           <Typography ml={0.3} gutterBottom textAlign="left" fontSize={13}>
-            2002
+            2023
+            {/* {data?.releaseDate} */}
           </Typography>
           <Grid container columnSpacing={2} pl={0.4}>
-            <Grid item ml={0.2}>
-              <Typography
-                border={1}
-                borderRadius={4}
-                padding={0.8}
-                fontSize={11}
-                fontWeight="bold"
-              >
-                Action
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography
-                border={1}
-                borderRadius={4}
-                padding={0.8}
-                fontSize={11}
-                fontWeight="bold"
-              >
-                SciFi
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography
-                border={1}
-                borderRadius={4}
-                padding={0.8}
-                fontSize={11}
-                fontWeight="bold"
-              >
-                Future
-              </Typography>
-            </Grid>
+            {data?.genres.map((genre, index) => (
+              <Grid item ml={0.2} key={index}>
+                <Typography
+                  border={1}
+                  borderRadius={4}
+                  padding={0.8}
+                  fontSize={11}
+                  fontWeight="bold"
+                >
+                  {genre}
+                </Typography>
+              </Grid>
+            ))}
           </Grid>
           <Typography
             pl={0.4}
