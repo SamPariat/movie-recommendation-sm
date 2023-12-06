@@ -13,6 +13,7 @@ const NotUserReviewsButton = () => {
     const response = await api<TrendingInfo | null>(
       "get",
       "/movie/latest-trending",
+      null,
       null
     );
     return response.data;

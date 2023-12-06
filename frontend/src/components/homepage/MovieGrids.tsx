@@ -10,7 +10,7 @@ import api from "../../api";
 
 const MovieGrids = () => {
   const fetchTop5Trending = async () => {
-    const response = await api<any>("get", "/movie/top-5-trending", null);
+    const response = await api<any>("get", "/movie/top-5-trending", null, null);
     return response.data.top5Trending;
   };
 

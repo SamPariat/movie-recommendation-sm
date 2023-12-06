@@ -6,9 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 
 import api from "../../api";
-import type { MovieInfo, TrendingInfo } from "../../types/movie";
+import type { MovieInfo } from "../../types/movie";
 
-const NotUserReviewsButton = () => {
+const DynamicReviews = () => {
   const params = useParams();
   //   console.log(params);
   const fetchMovieInfo = async () => {
@@ -138,4 +138,4 @@ const NotUserReviewsButton = () => {
   );
 };
 
-export default NotUserReviewsButton;
+export default DynamicReviews;

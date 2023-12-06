@@ -9,8 +9,9 @@ import { useParams } from "react-router-dom";
 // import { TextField } from "@mui/material";
 import PopUpButton from "./PopUpButton";
 import DynamicReviews from "./DynamicReviews";
-import NotUserReviewsButton from "./NotUserReviewsButton";
+// import NotUserReviewsButton from "./NotUserReviewsButton";
 import ReviewGrids from "./ReviewGrids";
+import ReviewStats from "./ReviewStats";
 
 const Reviews = () => {
   const location = useParams();
@@ -22,7 +23,7 @@ const Reviews = () => {
       flexDirection="column"
       minHeight="100vh"
     >
-      <Grid container py={10}>
+      <Grid container pt={10}>
         <Grid item>
           <DynamicReviews />
           {/* <NotUserReviewsButton/> */}
@@ -35,11 +36,29 @@ const Reviews = () => {
             variant="h5"
             fontWeight="bold"
           >
-            Top 5 Recommended Movies
+            Recommended Movies For You
           </Typography>
         </Grid>
         <Grid item pt={5} pl={2}>
           <ReviewGrids />
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item pt={5}>
+          <Typography
+            textAlign="left"
+            px={10}
+            color="secondary.main"
+            variant="h5"
+            fontWeight="bold"
+          >
+            Review Statistics
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid container justifyContent="center">
+        <Grid item>
+          <ReviewStats />
         </Grid>
       </Grid>
       <Typography
