@@ -9,12 +9,51 @@ import {
   NoReviewProvidedError,
   QueryInvalidError,
 } from "../errors";
-import authCheck from "../middleware/auth-check";
 import MovieReview from "../models/movie-review";
-import { type IMovieUser } from "../models/movie-user";
-import { saveReview } from "../utils";
+import { saveReview, sentimentData, sentimentDataOfMovie } from "../utils";
 
 const router = Router();
+
+/**
+ * @path GET /sentiment/review-analytics/:movie
+ * @summary Retrieve the review analytics
+ * @param {string} movie The title of the movie for which analytics are to be retrieved
+ * @returns {Object} The array of analytics
+ * @description Retrieves a list of analytics for each movie based on the sentiment
+ * @throws {QueryInvalidError} If no movie is provided
+ * @throws {ErrorFetchingReviews} If any error occurs
+ */
+router.get(
+  "/review-analytics/:movie",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const movie = req.params.movie;
+
+      if (!movie) {
+        throw new QueryInvalidError(ErrorMessages.NoMovieProvided);
+      }
+
+      const reviewAnalytics = await sentimentDataOfMovie(movie);
+
+      res.json({ reviewAnalytics });
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+router.get(
+  "/review-analytics/all",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const reviewAnalytics = await sentimentData();
+
+      res.json({ reviewAnalytics });
+    } catch (e) {
+      next(e);
+    }
+  }
+);
 
 /**
  * @path GET /sentiment/get-reviews/:movie?limit=:limit&page=:page
@@ -29,7 +68,7 @@ const router = Router();
  */
 router.get(
   "/get-reviews/:movie",
-  authCheck,
+  // authCheck,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const page = parseInt(req.query.page as string) || 1;
@@ -70,25 +109,24 @@ router.get(
  */
 router.post(
   "/save-review/:movie",
-  authCheck,
+  // authCheck,
   async (req: Request, res: Response, next: NextFunction) => {
-    const movie = req.params.movie;
+    const movie = req.params.movie as string;
+    const { name, review } = req.body as { name: string; review: string };
 
     if (!movie) {
       throw new QueryInvalidError(ErrorMessages.NoMovieProvided);
     }
 
-    const review = req.query.review;
-
-    if (!review) {
+    if (!review || review.length === 0 || !name || name.length === 0) {
       throw new NoReviewProvidedError(ErrorMessages.NoReviewProvided);
     }
 
     try {
-      const user = req.user as IMovieUser;
-      const movie = req.params.movie as string;
+      // const user = req.user as IMovieUser;
 
-      const newReview = await saveReview(review as string, user._id, movie);
+      // const newReview = await saveReview(review as string, user._id, movie);
+      const newReview = await saveReview(review, name, movie);
 
       return res.status(HttpStatus.Created).json(newReview);
     } catch (e) {

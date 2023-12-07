@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import mongoose from "mongoose";
 
-import { ErrorMessages } from "../constants";
+import { ErrorMessages, Sentiment } from "../constants";
 import {
   ErrorFetchingReviewSentiment,
   ModelServerError,
@@ -11,7 +11,8 @@ import MovieReview, { type IMovieReview } from "../models/movie-review";
 
 export const saveReview = async (
   review: string,
-  userId: mongoose.Types.ObjectId,
+  name: string,
+  // userId: mongoose.Types.ObjectId,
   movie: string
 ): Promise<IMovieReview> => {
   try {
@@ -25,8 +26,10 @@ export const saveReview = async (
       review,
       sentiment,
       movie,
-      movieUser: userId,
+      name,
+      // movieUser: userId,
     });
+
 
     await newReview.save();
 
@@ -36,6 +39,78 @@ export const saveReview = async (
       if (e.response?.status === 400) {
         throw new NoReviewProvidedError(ErrorMessages.NoReviewProvided);
       } else if (e.response?.status === 500) {
+        throw new ErrorFetchingReviewSentiment(
+          ErrorMessages.ErrorFetchingSentiment
+        );
+      } else {
+        throw new ModelServerError(ErrorMessages.ErrorFetchingSentiment);
+      }
+    }
+
+    throw e;
+  }
+};
+
+export const sentimentData = async (): Promise<
+  {
+    name: string;
+    value: number;
+  }[]
+> => {
+  try {
+    const positiveReviews = await MovieReview.countDocuments({
+      sentiment: Sentiment.Positive,
+    });
+
+    const negativeReviews = await MovieReview.countDocuments({
+      sentiment: Sentiment.Negative,
+    });
+
+    return [
+      { name: Sentiment.Positive, value: positiveReviews },
+      { name: Sentiment.Negative, value: negativeReviews },
+    ];
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      if (e.response?.status === 500) {
+        throw new ErrorFetchingReviewSentiment(
+          ErrorMessages.ErrorFetchingSentiment
+        );
+      } else {
+        throw new ModelServerError(ErrorMessages.ErrorFetchingSentiment);
+      }
+    }
+
+    throw e;
+  }
+};
+
+export const sentimentDataOfMovie = async (
+  movie: string
+): Promise<
+  {
+    name: string;
+    value: number;
+  }[]
+> => {
+  try {
+    const positiveReviews = await MovieReview.countDocuments({
+      sentiment: Sentiment.Positive,
+      movie,
+    });
+
+    const negativeReviews = await MovieReview.countDocuments({
+      sentiment: Sentiment.Negative,
+      movie,
+    });
+
+    return [
+      { name: Sentiment.Positive, value: positiveReviews },
+      { name: Sentiment.Negative, value: negativeReviews },
+    ];
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      if (e.response?.status === 500) {
         throw new ErrorFetchingReviewSentiment(
           ErrorMessages.ErrorFetchingSentiment
         );

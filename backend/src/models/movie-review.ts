@@ -4,7 +4,8 @@ export interface IMovieReview extends Document {
   review: string;
   sentiment: string;
   movie: string;
-  movieUser: Schema.Types.ObjectId;
+  name: string;
+  // movieUser: Schema.Types.ObjectId;
 }
 
 const movieReviewSchema = new Schema<IMovieReview>({
@@ -20,10 +21,14 @@ const movieReviewSchema = new Schema<IMovieReview>({
     type: String,
     required: true,
   },
-  movieUser: {
-    type: Schema.Types.ObjectId,
-    ref: "MovieUser",
+  name: {
+    type: String,
+    required: true,
   },
+  // movieUser: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "MovieUser",
+  // },
 });
 
 const MovieReview: Model<IMovieReview> = model(
