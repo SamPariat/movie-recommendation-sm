@@ -34,19 +34,17 @@ passportConfig();
 app.use(morgan("dev"));
 app.use(express.json()); // Parse incoming JSON as an object
 app.use((req: Request, res: Response, next: NextFunction) => {
-  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "*",
-    // origin: [
-    //   "http://localhost:5173",
-    //   "http://localhost:3000",
-    //   "http://127.0.0.1:5173",
-    // ],
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "http://127.0.0.1:5173",
+    ],
     credentials: true,
     preflightContinue: true,
   })
