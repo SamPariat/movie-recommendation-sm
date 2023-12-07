@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 // import Gridsplit from "../homepage/GridSplit";
 // import NotUserReviewsButton from "./NotUserReviewsButton";
@@ -10,12 +10,14 @@ import { useParams } from "react-router-dom";
 import PopUpButton from "./PopUpButton";
 import DynamicReviews from "./DynamicReviews";
 // import NotUserReviewsButton from "./NotUserReviewsButton";
-import ReviewGrids from "./ReviewGrids";
+import RecommendMovies from "./RecommendMovies";
 import ReviewStats from "./ReviewStats";
 
 const Reviews = () => {
-  const location = useParams();
-  console.log(location);
+  // const location = useParams();
+  // console.log(location);
+  // const location = useLocation();
+  // console.log(location);
   return (
     <Box
       bgcolor="primary.main"
@@ -28,7 +30,7 @@ const Reviews = () => {
           <DynamicReviews />
           {/* <NotUserReviewsButton/> */}
         </Grid>
-        <Grid item pt={5}>
+        {/* <Grid item pt={5}>
           <Typography
             textAlign="left"
             px={10}
@@ -40,8 +42,9 @@ const Reviews = () => {
           </Typography>
         </Grid>
         <Grid item pt={5} pl={2}>
-          <ReviewGrids />
-        </Grid>
+          <RecommendMovies />
+        </Grid> */}
+        <RecommendMovies/>
       </Grid>
       <Grid container>
         <Grid item pt={5}>
