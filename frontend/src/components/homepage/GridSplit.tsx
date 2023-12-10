@@ -94,7 +94,11 @@ const GridSplit = () => {
             <Grid item>
               <Button
                 sx={{ color: "white", border: 1, borderRadius: 20 }}
-                onClick={() => navigate(`/reviews/${data?.id}`)}
+                onClick={() =>
+                  navigate(`/reviews/${data?.id}`, {
+                    state: { name: data?.title },
+                  })
+                }
               >
                 User Reviews
               </Button>

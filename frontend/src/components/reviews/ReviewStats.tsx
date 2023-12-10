@@ -1,10 +1,13 @@
 import { useCallback, useState } from "react";
 import { PieChart, Pie, Sector, Cell } from "recharts";
+import { useQuery } from "@tanstack/react-query";
+import api from "../../api";
+import { useLocation } from "react-router-dom";
 
-const data = [
-  { name: "Positive", value: 600 },
-  { name: "Negative", value: 400 },
-];
+// const data = [
+//   { name: "Positive", value: 600 },
+//   { name: "Negative", value: 400 },
+// ];
 
 const COLORS = ["#43C224", "#D72020"];
 
@@ -82,6 +85,20 @@ const renderActiveShape = (props: any) => {
 };
 
 export default function ReviewStats() {
+  const location = useLocation();
+  const fetchData = async () => {
+    const response = await api<{
+      reviewAnalytics: { name: string; value: number }[];
+    }>("get", `/sentiment/review-analytics/${location.state.name}`, null, null);
+    return response.data.reviewAnalytics;
+  };
+
+  const { data, status } = useQuery({
+    queryKey: ["Pie chart", location.state.name],
+    queryFn: fetchData,
+  });
+  // console.log(data);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const onPieEnter = useCallback(
     (_: any, index: number) => {
@@ -96,7 +113,7 @@ export default function ReviewStats() {
         activeIndex={activeIndex}
         activeShape={renderActiveShape}
         data={data}
-        cx={200}
+        cx={250}
         cy={200}
         innerRadius={60}
         outerRadius={80}
@@ -104,8 +121,12 @@ export default function ReviewStats() {
         dataKey="value"
         onMouseEnter={onPieEnter}
       >
-        {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} style={{outline : 'none'}} />
+        {data?.map((entry, index) => (
+          <Cell
+            key={`cell-${index}`}
+            fill={COLORS[index % COLORS.length]}
+            style={{ outline: "none" }}
+          />
         ))}
       </Pie>
     </PieChart>

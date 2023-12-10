@@ -17,9 +17,9 @@ import { Link } from "react-router-dom";
 
 // const pages = ["Home", "About", "Login"];
 const pages = [
+  // { id: "login-button", title: "Log In", to: "/login" },
   { id: "home-button", title: "Home", to: "/" },
   { id: "about-button", title: "About", to: "/about" },
-  { id: "login-button", title: "Log In", to: "/login" },
 ];
 
 export const Navbar = () => {
@@ -124,7 +124,7 @@ export const Navbar = () => {
 
           <NavButtons navMenuCloseHandler={handleCloseNavMenu} />
 
-          <Box sx={{ flexGrow: 0 }}>
+          {/* <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
@@ -138,7 +138,7 @@ export const Navbar = () => {
               userAnchor={anchorElUser}
               setUserAnchor={setAnchorElUser}
             />
-          </Box>
+          </Box> */}
         </Toolbar>
       </Container>
     </AppBar>

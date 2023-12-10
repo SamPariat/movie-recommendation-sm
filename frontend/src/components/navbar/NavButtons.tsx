@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const pages = [
   { id: "home-button", title: "Home", to: "/" },
   { id: "about-button", title: "About", to: "/about" },
-  { id: "login-button", title: "Log In", to: "/login" },
+  // { id: "login-button", title: "Log In", to: "/login" },
 ];
 
 type NavButtonsProps = {
