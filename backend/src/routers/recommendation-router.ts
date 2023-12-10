@@ -60,7 +60,7 @@ router.get(
       // Generate promises for each of the predicted movies
       const movieInfoPromise = predictedMovies.map(async (pred) => {
         const movieInfo = await getMovieInformationById(pred.id);
-        return movieInfo ? { ...movieInfo, title: pred.title } : null;
+        return movieInfo ? { ...movieInfo } : null;
       });
 
       // Run all the predictions in parallel to each other

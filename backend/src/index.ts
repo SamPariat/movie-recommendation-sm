@@ -55,7 +55,8 @@ app.use(
     resave: false,
     store: redisStore,
     cookie: {
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 60 * 1000,
+      // maxAge: 24 * 60 * 60 * 1000,
     },
     saveUninitialized: true,
   })

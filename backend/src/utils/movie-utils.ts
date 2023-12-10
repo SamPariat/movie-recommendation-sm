@@ -39,7 +39,7 @@ export const getMovieInformationById = async (
 ): Promise<MovieInfo> => {
   try {
     const response = await axios.get(
-      `https://api.themoviedb.org/3/movie/${movieId}`,
+      `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`,
       {
         headers: {
           Authorization: "Bearer " + process.env.TMDB_API_KEY,
@@ -51,6 +51,7 @@ export const getMovieInformationById = async (
     const movieData = response.data;
 
     return {
+      id: movieData.id,
       title: movieData.original_title,
       adult: movieData.adult,
       imagePath: "https://image.tmdb.org/t/p/w500" + movieData.poster_path,

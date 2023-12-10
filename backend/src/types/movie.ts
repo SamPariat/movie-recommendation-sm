@@ -3,6 +3,7 @@ interface CommonDetails {
 }
 
 interface MovieCommonDetails extends CommonDetails {
+  id: number;
   adult: boolean;
   tagline: string;
   genres: string[];
@@ -25,7 +26,6 @@ export interface CastInfo {
 }
 
 export interface TrendingInfo extends MovieCommonDetails {
-  id: number;
   title: string;
 }
 
