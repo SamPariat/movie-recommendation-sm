@@ -18,6 +18,7 @@ import PopUpButton from "./PopUpButton";
 import api from "../../api";
 import RecommendMovies from "./RecommendMovies";
 import ReviewStats from "./ReviewStats";
+import { CircularProgress } from "@mui/material";
 
 const Reviews = () => {
   // const location = useParams();
@@ -48,6 +49,10 @@ const Reviews = () => {
     event.preventDefault();
     setPage(value);
   };
+
+  // if (status === "pending") {
+  //   return <CircularProgress />;
+  // }
 
   return (
     <Box
@@ -120,7 +125,12 @@ const Reviews = () => {
       </Typography>
       <Grid container py={5} justifyContent="center">
         {data?.reviews.map((review) => (
-          <User_Reviews key={review._id} name={review.name} review={review.review} sentiment={review.sentiment}/>
+          <User_Reviews
+            key={review._id}
+            name={review.name}
+            review={review.review}
+            sentiment={review.sentiment}
+          />
         ))}
       </Grid>
       <Stack alignItems="center">

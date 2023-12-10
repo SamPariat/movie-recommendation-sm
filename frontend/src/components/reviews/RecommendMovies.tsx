@@ -59,7 +59,7 @@ const RecommendMovies = () => {
                 <Paper
                   elevation={3}
                   onClick={() =>
-                    navigate(`reviews/${recommendation.id}`, {
+                    navigate(`/reviews/${recommendation.id}`, {
                       state: { name: recommendation.title },
                     })
                   }
