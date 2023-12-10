@@ -97,7 +97,7 @@ export default function ReviewStats() {
     queryKey: ["Pie chart", location.state.name],
     queryFn: fetchData,
   });
-  console.log(data);
+  // console.log(data);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const onPieEnter = useCallback(

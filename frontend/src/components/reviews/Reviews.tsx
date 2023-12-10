@@ -1,23 +1,54 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import Pagination from "@mui/material/Pagination";
 import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import User_Reviews from "./User_Reviews";
 
 // import Gridsplit from "../homepage/GridSplit";
 // import NotUserReviewsButton from "./NotUserReviewsButton";
 // import { TextField } from "@mui/material";
-import PopUpButton from "./PopUpButton";
 import DynamicReviews from "./DynamicReviews";
+import PopUpButton from "./PopUpButton";
 // import NotUserReviewsButton from "./NotUserReviewsButton";
+import api from "../../api";
 import RecommendMovies from "./RecommendMovies";
 import ReviewStats from "./ReviewStats";
 
 const Reviews = () => {
   // const location = useParams();
   // console.log(location);
-  // const location = useLocation();
-  // console.log(location);
+  const location = useLocation();
+  console.log(location);
+
+  const [page, setPage] = useState<number>(1);
+
+  const fetchUserReviews = async () => {
+    const response = await api<{ reviews: any[] }>(
+      "get",
+      `/sentiment/get-reviews/${location.state.name}?page=${page}&limit=3`,
+      null,
+      null
+    );
+    return response.data;
+  };
+
+  const { data, status } = useQuery({
+    queryKey: ["User reviews", location.state.name, page],
+    queryFn: fetchUserReviews,
+  });
+
+  console.log(data);
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    event.preventDefault();
+    setPage(value);
+  };
+
   return (
     <Box
       bgcolor="primary.main"
@@ -44,7 +75,7 @@ const Reviews = () => {
         <Grid item pt={5} pl={2}>
           <RecommendMovies />
         </Grid> */}
-        <RecommendMovies/>
+        <RecommendMovies />
       </Grid>
       <Grid container>
         <Grid item pt={5}>
@@ -88,25 +119,19 @@ const Reviews = () => {
         User Reviews
       </Typography>
       <Grid container py={5} justifyContent="center">
-        <Grid item xs={12} sm={8} md={9} lg={10} mt={2}>
-          <Paper elevation={3} sx={{ mx: 10, bgcolor: "primary.main", px: 3 }}>
-            <Typography py={4} pl={0.4} textAlign="left" variant="subtitle2">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt
-              fuga quisquam molestias officia ab consectetur maxime nemo sed eum
-              rem deserunt sequi explicabo veritatis incidunt debitis odio,
-              reprehenderit ad nisi, fugit ipsam tempora magnam! Quos vero odio
-              cupiditate ratione. Dolorem magni aperiam adipisci dolorum
-              reprehenderit sint, quam explicabo recusandae. Numquam repellendus
-              quas natus. Nemo fugit nobis fuga debitis eius beatae iure error
-              id. Sed, tempora corrupti? Asperiores cum facilis distinctio quae?
-              Nisi, tempore voluptas. Iusto, magnam! Deleniti molestias,
-              suscipit repudiandae fugiat voluptate earum perferendis similique
-              voluptates. Quaerat sunt vero, earum in, atque porro consectetur
-              at perferendis reiciendis natus placeat id.
-            </Typography>
-          </Paper>
-        </Grid>
+        {data?.reviews.map((review) => (
+          <User_Reviews key={review._id} name={review.name} review={review.review} sentiment={review.sentiment}/>
+        ))}
       </Grid>
+      <Stack alignItems="center">
+        <Pagination
+          count={10}
+          page={page}
+          onChange={handleChange}
+          variant="outlined"
+          color="secondary"
+        />
+      </Stack>
     </Box>
   );
 };

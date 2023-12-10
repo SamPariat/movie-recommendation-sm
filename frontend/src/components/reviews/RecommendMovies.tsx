@@ -5,11 +5,12 @@ import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 // import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import api from "../../api";
 
 const RecommendMovies = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const fetchTop5Recommends = async () => {
     const response = await api<any>(
@@ -22,11 +23,11 @@ const RecommendMovies = () => {
   };
 
   const { data, status } = useQuery({
-    queryKey: ["top 5 recommends"],
+    queryKey: ["top 5 recommends", location.state.name],
     queryFn: fetchTop5Recommends,
   });
 
-  // console.log(data);
+  console.log(data);
 
   if (status === "pending") {
     return <CircularProgress />;
@@ -57,7 +58,17 @@ const RecommendMovies = () => {
               <Grid item key={recommendation.title}>
                 <Paper
                   elevation={3}
-                  sx={{ bgcolor: "primary.main", mb: 4, maxWidth: 250 }}
+                  onClick={() =>
+                    navigate(`reviews/${recommendation.id}`, {
+                      state: { name: recommendation.title },
+                    })
+                  }
+                  sx={{
+                    bgcolor: "primary.main",
+                    mb: 4,
+                    maxWidth: 250,
+                    cursor: "pointer",
+                  }}
                 >
                   <Stack direction="column" justifyContent="center">
                     <img

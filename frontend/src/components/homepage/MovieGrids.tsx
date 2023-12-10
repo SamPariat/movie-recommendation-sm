@@ -5,10 +5,12 @@ import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 // import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 import api from "../../api";
 
 const MovieGrids = () => {
+  const navigate = useNavigate();
   const fetchTop5Trending = async () => {
     const response = await api<any>("get", "/movie/top-5-trending", null, null);
     return response.data.top5Trending;
@@ -32,7 +34,12 @@ const MovieGrids = () => {
           <Grid item key={recommendation.title}>
             <Paper
               elevation={3}
-              sx={{ bgcolor: "primary.main", mb: 4, maxWidth: 250 }}
+              onClick={() =>
+                navigate(`reviews/${recommendation.id}`, {
+                  state: { name: recommendation.title },
+                })
+              }
+              sx={{ bgcolor: "primary.main", mb: 4, maxWidth: 250, cursor: 'pointer'}}
             >
               <Stack direction="column" justifyContent="center">
                 <img
