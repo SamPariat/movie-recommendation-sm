@@ -113,10 +113,10 @@ export default function ReviewStats() {
         activeIndex={activeIndex}
         activeShape={renderActiveShape}
         data={data}
-        cx={250}
+        cx={200}
         cy={200}
-        innerRadius={60}
-        outerRadius={80}
+        innerRadius={50}
+        outerRadius={70}
         fill="#FFB300"
         dataKey="value"
         onMouseEnter={onPieEnter}

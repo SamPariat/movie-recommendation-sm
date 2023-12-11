@@ -27,7 +27,7 @@ const RecommendMovies = () => {
     queryFn: fetchTop5Recommends,
   });
 
-  console.log(data);
+  // console.log(data);
 
   if (status === "pending") {
     return <CircularProgress />;

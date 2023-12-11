@@ -24,7 +24,7 @@ const Reviews = () => {
   // const location = useParams();
   // console.log(location);
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
 
   const [page, setPage] = useState<number>(1);
 
@@ -38,12 +38,12 @@ const Reviews = () => {
     return response.data;
   };
 
-  const { data, status } = useQuery({
+  const { data} = useQuery({
     queryKey: ["User reviews", location.state.name, page],
     queryFn: fetchUserReviews,
   });
 
-  console.log(data);
+  // console.log(data);
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     event.preventDefault();
