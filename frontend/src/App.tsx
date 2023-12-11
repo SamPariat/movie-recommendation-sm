@@ -9,6 +9,7 @@ import HomePage from "./components/homepage/HomePage";
 import Reviews from "./components/reviews/Reviews";
 import Cast from "./components/cast&crew/Cast";
 import Login from "./components/login/Login";
+import AboutPage from "./components/About/AboutPage";
 // const HomePage = lazy(() => import("./components/homepage/HomePage"));
 // const Reviews = lazy(() => import("./components/reviews/Reviews"));
 // const Cast = lazy(() => import("./components/cast&crew/Cast"));
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
     element: <NavContainer />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "about", element: null },
+      { path: "about", element: <AboutPage/>},
       // { path: "login", element: <Login /> },
       { path: "cast-crew/:movieId", element: <Cast /> },
       { path: "reviews/:movieId", element: <Reviews /> },
