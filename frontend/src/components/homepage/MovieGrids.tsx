@@ -21,7 +21,7 @@ const MovieGrids = () => {
     queryFn: fetchTop5Trending,
   });
 
-  console.log(data);
+  // console.log(data);
 
   if (status === "pending") {
     return <CircularProgress />;

@@ -12,7 +12,7 @@ type User_ReviewsProps = {
 
 const User_Reviews = ({ name, review, sentiment }: User_ReviewsProps) => {
   return (
-    <Grid item xs={12} sm={8} md={9} lg={10} mt={2}>
+    <Grid item xs={12} sm={8} md={9} lg={10} mt={2} pb={3}>
       <Paper elevation={3} sx={{ mx: 10, bgcolor: "primary.main", px: 3 }}>
         <Stack spacing={1}>
           <Typography
@@ -27,7 +27,7 @@ const User_Reviews = ({ name, review, sentiment }: User_ReviewsProps) => {
           <Typography py={1} pl={0.4} textAlign="left" variant="subtitle2">
             {review}
           </Typography>
-          <Typography py={1} pl={0.4} textAlign="left" variant="subtitle2" fontWeight="bold">
+          <Typography py={1} pl={0.4} textAlign="left" variant="subtitle2" fontWeight="bold" color="secondary">
             Predicted Sentiment: {sentiment}
           </Typography>
         </Stack>

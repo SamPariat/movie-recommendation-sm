@@ -22,7 +22,7 @@ const DynamicReviews = () => {
   };
 
   const { data, status } = useQuery<MovieInfo | null>({
-    queryKey: ["movie info"],
+    queryKey: ["movie info", params.movieId],
     queryFn: fetchMovieInfo,
   });
 

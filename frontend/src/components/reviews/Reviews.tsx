@@ -18,12 +18,13 @@ import PopUpButton from "./PopUpButton";
 import api from "../../api";
 import RecommendMovies from "./RecommendMovies";
 import ReviewStats from "./ReviewStats";
+import { CircularProgress } from "@mui/material";
 
 const Reviews = () => {
   // const location = useParams();
   // console.log(location);
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
 
   const [page, setPage] = useState<number>(1);
 
@@ -37,17 +38,21 @@ const Reviews = () => {
     return response.data;
   };
 
-  const { data, status } = useQuery({
+  const { data} = useQuery({
     queryKey: ["User reviews", location.state.name, page],
     queryFn: fetchUserReviews,
   });
 
-  console.log(data);
+  // console.log(data);
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     event.preventDefault();
     setPage(value);
   };
+
+  // if (status === "pending") {
+  //   return <CircularProgress />;
+  // }
 
   return (
     <Box
@@ -120,7 +125,12 @@ const Reviews = () => {
       </Typography>
       <Grid container py={5} justifyContent="center">
         {data?.reviews.map((review) => (
-          <User_Reviews key={review._id} name={review.name} review={review.review} sentiment={review.sentiment}/>
+          <User_Reviews
+            key={review._id}
+            name={review.name}
+            review={review.review}
+            sentiment={review.sentiment}
+          />
         ))}
       </Grid>
       <Stack alignItems="center">
