@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("ATLAS_CONNECTION_URL")
+}
+
+model movieusers {
+  id                 String         @id @default(auto()) @map("_id") @db.ObjectId
+  email              String         @unique
+  password           String
+  name               String
+  thumbnailUrl       String?
+  hashedRefreshToken String?
+  moviereview        moviereviews[]
+}
+
+model moviereviews {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  review      String
+  sentiment   String
+  movie       String
+  movieuser   movieusers @relation(references: [id], fields: [movieuserId])
+  movieuserId String     @db.ObjectId
+}
