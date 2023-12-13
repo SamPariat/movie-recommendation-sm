@@ -1,41 +1,38 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from '@remix-run/node';
+
+import CineSuggestIntro from '~/components/hero/cinesuggest-intro';
+import DescriptionWithImage from '~/components/hero/description-with-image';
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: 'CineSuggest' },
+    {
+      name: 'description',
+      content:
+        'Welcome to CineSuggest - The movie recommendation and review system',
+    },
   ];
 };
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
-    </div>
+    <>
+      <CineSuggestIntro />
+      <DescriptionWithImage
+        title='Cosine Similarity'
+        description='Unlock a world of personalized movie recommendations using
+        the precision of cosine similarity. Your perfect film
+        match is just a click away.'
+        src='./images/cosine-similarity-3d.png'
+        alt='CosineSimilarity.png'
+      />
+      <DescriptionWithImage
+        title='Naive Bayes'
+        description='Delve into the emotional pulse of cinema with our
+        sentiment analysis powered by Naive Bayes.'
+        src='./images/naive-bayes-3d.png'
+        alt='NaiveBayes.png'
+      />
+    </>
   );
 }
