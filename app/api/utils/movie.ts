@@ -8,12 +8,11 @@ import {
 import request from '..';
 
 const getLatestTrending = async (): Promise<ITrendingInfo> => {
-  const latestTrending = await request<ITrendingInfo>(
-    'get',
-    '/movie/latest-trending'
-  );
+  const latestTrending = await request<{
+    latestTrending: ITrendingInfo;
+  }>('get', '/movie/latest-trending');
 
-  return latestTrending.data;
+  return latestTrending.data.latestTrending;
 };
 
 const getTop5Trending = async (): Promise<ITrendingInfo[]> => {

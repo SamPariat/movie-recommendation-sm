@@ -28,7 +28,7 @@ const abouts: {
     title: 'Backend',
     to: '#',
     description:
-      'Backend created using Node.js and Passport.js for authentication.',
+      'Backend created using Nest.js and Passport.js for authentication.',
   },
   {
     title: 'Model',

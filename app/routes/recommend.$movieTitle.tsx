@@ -2,6 +2,7 @@ import { LoaderFunctionArgs, defer } from '@remix-run/node';
 import {
   Await,
   Link,
+  MetaFunction,
   useLoaderData,
   useLocation,
   useParams,
@@ -20,6 +21,18 @@ const skeletonId: { id: string }[] = [
   { id: 'movie-skeleton-4' },
   { id: 'movie-skeleton-5' },
 ];
+
+export const meta: MetaFunction<typeof loader> = ({ params }) => {
+  return [
+    {
+      title: `CineSuggest | Recommendation - ${params.movieTitle}`,
+    },
+    {
+      name: 'description',
+      content: `Here are some recommendations for ${params.movieTitle}`,
+    },
+  ];
+};
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const recommendations = getRecommendations(

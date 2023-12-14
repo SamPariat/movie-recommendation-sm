@@ -1,10 +1,27 @@
 import { LoaderFunctionArgs, defer } from '@remix-run/node';
-import { Await, Outlet, useLoaderData } from '@remix-run/react';
+import {
+  Await,
+  MetaFunction,
+  Outlet,
+  useLoaderData,
+} from '@remix-run/react';
 import { Suspense } from 'react';
 
 import { getInfo } from '~/api';
 import MovieInfoCard from '~/components/cards/movie-info-card';
 import MovieInfoSkeleton from '~/components/cards/movie-info-skeleton';
+
+export const meta: MetaFunction = () => {
+  return [
+    {
+      title: 'CineSuggest | Movie Details',
+    },
+    {
+      name: 'description',
+      content: 'Delve into the details of the movie',
+    },
+  ];
+};
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const info = getInfo(parseInt(params.movieId as string));

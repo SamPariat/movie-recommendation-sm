@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ActionFunctionArgs, json } from '@remix-run/node';
-import { Form, MetaFunction } from '@remix-run/react';
+import { Form, MetaFunction, useActionData } from '@remix-run/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -45,23 +45,16 @@ export async function action({ request }: ActionFunctionArgs) {
   const name = formData.get('name');
 
   try {
-    if (name) {
-      // Register
-      await signup(
-        email as string,
-        password as string,
-        name as string
-      );
-    } else {
-      // Login
-      await login(email as string, password as string);
-    }
+    const tokens = name
+      ? await signup(
+          email as string,
+          password as string,
+          name as string
+        )
+      : await login(email as string, password as string);
 
-    return json({ message: 'It works' });
-
-    // return redirect('/');
+    return json({ tokens });
   } catch (error) {
-    console.log(error);
     return json({ error });
   }
 }
@@ -73,6 +66,9 @@ export default function Login() {
   } = useForm<z.infer<typeof formFieldSchema>>({
     resolver: zodResolver(formFieldSchema),
   });
+
+  const actionData = useActionData<typeof action>();
+
   const [isLogin, setIsLogin] = useState<boolean>(true);
 
   return (

@@ -1,10 +1,23 @@
 import { LoaderFunctionArgs, defer } from '@remix-run/node';
-import { Await, useLoaderData } from '@remix-run/react';
+import { Await, MetaFunction, useLoaderData } from '@remix-run/react';
 import { Suspense } from 'react';
 import { getMovieCast } from '~/api';
 
 import ActorDirectorCard from '~/components/cards/actor-director-card';
 import ActorDirectorSkeleton from '~/components/cards/actor-director-skeleton';
+
+export const meta: MetaFunction<typeof loader> = ({ params }) => {
+  return [
+    {
+      title: `CineSuggest | Actors and Directors - ${params.movieId}`,
+    },
+    {
+      name: 'description',
+      content:
+        'Discover the magic that unfolds behind and in front of the camera, as we celebrate the brilliance of those who make the movies unforgettable',
+    },
+  ];
+};
 
 const skeletonId: { id: string }[] = [
   { id: 'actor-skeleton-1' },

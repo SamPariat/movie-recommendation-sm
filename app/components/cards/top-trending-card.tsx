@@ -67,11 +67,7 @@ export default function TopTrendingCard({
           >
             Movie Information
           </Button>
-          <Button
-            size='sm'
-            className='font-semibold'
-            variant='ghost'
-          >
+          <Button size='sm' className='font-semibold' variant='ghost'>
             User Reviews
           </Button>
         </CardFooter>

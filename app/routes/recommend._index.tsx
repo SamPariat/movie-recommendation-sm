@@ -1,9 +1,22 @@
 import { LoaderFunctionArgs, defer } from '@remix-run/node';
-import { Await, useLoaderData } from '@remix-run/react';
+import { Await, MetaFunction, useLoaderData } from '@remix-run/react';
 import { Suspense } from 'react';
 
 import { getAll } from '~/api';
 import AllMovieTable from '~/components/tables/all-movies-table';
+
+export const meta: MetaFunction = () => {
+  return [
+    {
+      title: 'CineSuggest | Recommend',
+    },
+    {
+      name: 'description',
+      content:
+        'Allow us to recommend a movie for you powered by our model',
+    },
+  ];
+};
 
 export async function loader({}: LoaderFunctionArgs) {
   const allMovies = getAll();
