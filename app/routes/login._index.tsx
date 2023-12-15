@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ActionFunctionArgs, json } from '@remix-run/node';
-import { Form, MetaFunction, useActionData } from '@remix-run/react';
+import { ActionFunctionArgs, json, redirect } from '@remix-run/node';
+import { Form, MetaFunction, useNavigation } from '@remix-run/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -9,6 +9,7 @@ import { login, signup } from '~/api';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
+import { commitSession, getSession } from '~/sessions';
 
 export const meta: MetaFunction = () => {
   return [
@@ -38,6 +39,8 @@ const formFieldSchema = z.object({
 });
 
 export async function action({ request }: ActionFunctionArgs) {
+  const session = await getSession(request.headers.get('Cookie'));
+
   const formData = await request.formData();
 
   const email = formData.get('email');
@@ -53,7 +56,13 @@ export async function action({ request }: ActionFunctionArgs) {
         )
       : await login(email as string, password as string);
 
-    return json({ tokens });
+    session.set('access_token', tokens.access_token);
+
+    return redirect('/', {
+      headers: {
+        'Set-Cookie': await commitSession(session),
+      },
+    });
   } catch (error) {
     return json({ error });
   }
@@ -66,9 +75,7 @@ export default function Login() {
   } = useForm<z.infer<typeof formFieldSchema>>({
     resolver: zodResolver(formFieldSchema),
   });
-
-  const actionData = useActionData<typeof action>();
-
+  const navigation = useNavigation();
   const [isLogin, setIsLogin] = useState<boolean>(true);
 
   return (
@@ -119,8 +126,15 @@ export default function Login() {
                 </p>
               </div>
             )}
-            <Button size='sm'>
-              {isLogin ? 'Login' : 'Register'}
+            <Button
+              size='sm'
+              disabled={navigation.state === 'submitting'}
+            >
+              {navigation.state === 'idle'
+                ? isLogin
+                  ? 'Login'
+                  : 'Register'
+                : 'Logging in...'}
             </Button>
           </Form>
           <p
