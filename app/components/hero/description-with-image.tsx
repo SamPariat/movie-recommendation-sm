@@ -13,7 +13,7 @@ const imageVariants: Variants = {
   },
 };
 
-export default function DescriptionWithImage({
+export function DescriptionWithImage({
   title,
   description,
   src,

@@ -3,7 +3,7 @@ import { Await, MetaFunction, useLoaderData } from '@remix-run/react';
 import { Suspense } from 'react';
 
 import { getAll } from '~/api';
-import AllMovieTable from '~/components/tables/all-movies-table';
+import { AllMovieTable } from '~/components/tables';
 
 export const meta: MetaFunction = () => {
   return [

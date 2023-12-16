@@ -12,10 +12,9 @@ import { ArrowDownWideNarrow, ArrowUp } from 'lucide-react';
 import { useState } from 'react';
 
 import { IMovieIdAndTitle } from '~/types';
+import { AllMoviesPagination, AllMoviesRenderedTable } from '.';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import AllMoviesPagination from './all-movies-pagination';
-import AllMoviesRenderedTable from './all-movies-rendered-table';
 
 type AllMovieTableProps = {
   data: IMovieIdAndTitle[];
@@ -49,7 +48,7 @@ const columns: ColumnDef<IMovieIdAndTitle>[] = [
   },
 ];
 
-export default function AllMovieTable({ data }: AllMovieTableProps) {
+export function AllMovieTable({ data }: AllMovieTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] =
     useState<ColumnFiltersState>([]);

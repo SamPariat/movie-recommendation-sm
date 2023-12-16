@@ -6,9 +6,10 @@ import {
 } from '../ui/card';
 import { Skeleton } from '../ui/skeleton';
 
-export default function TopTrendingSkeleton() {
+export function TopTrendingSkeleton() {
   return (
     <div className='flex flex-col mx-0 md:mx-10 xl:mx-16'>
+      <Skeleton className='h-96 rounded-lg' />
       <Card>
         <CardHeader>
           <Skeleton className='h-[40px] w-[200px] md:h-[40px] md:w-[500px]' />

@@ -8,8 +8,7 @@ import {
 import { Suspense } from 'react';
 
 import { getInfo } from '~/api';
-import MovieInfoCard from '~/components/cards/movie-info-card';
-import MovieInfoSkeleton from '~/components/cards/movie-info-skeleton';
+import { MovieInfoCard, MovieInfoSkeleton } from '~/components/cards';
 
 export const meta: MetaFunction = () => {
   return [

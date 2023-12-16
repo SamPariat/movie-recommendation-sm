@@ -10,7 +10,7 @@ const imageVariants: Variants = {
   },
 };
 
-export default function CineSuggestIntro() {
+export function CineSuggestIntro() {
   const navigate = useNavigate();
 
   return (

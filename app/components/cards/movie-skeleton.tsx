@@ -6,9 +6,10 @@ import {
 } from '../ui/card';
 import { Skeleton } from '../ui/skeleton';
 
-export default function MovieSkeleton() {
+export function MovieSkeleton() {
   return (
     <div className='flex flex-col mx-0 md:mx-10 xl:mx-16 w-full md:w-3/4'>
+      <Skeleton className='h-48 lg:h-96 rounded-md' />
       <Card>
         <CardHeader>
           <Skeleton className='h-[40px] md:h-[40px] w-[200px] md:w-[200px]' />

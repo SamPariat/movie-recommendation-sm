@@ -7,11 +7,13 @@ import { Await, useLoaderData } from '@remix-run/react';
 import { Suspense } from 'react';
 
 import { getLatestTrending, getTop5Trending } from '~/api';
-import MovieCard from '~/components/cards/movie-card';
-import MovieSkeleton from '~/components/cards/movie-skeleton';
-import TopTrendingCard from '~/components/cards/top-trending-card';
-import TopTrendingSkeleton from '~/components/cards/top-trending-skeleton';
-import TrendingDescription from '~/components/trending/trending-description';
+import {
+  MovieCard,
+  MovieSkeleton,
+  TopTrendingCard,
+  TopTrendingSkeleton,
+} from '~/components/cards';
+import { TrendingDescription } from '~/components/hero';
 
 export const meta: MetaFunction = () => {
   return [

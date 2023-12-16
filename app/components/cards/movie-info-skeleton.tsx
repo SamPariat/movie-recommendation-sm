@@ -1,6 +1,6 @@
 import { Skeleton } from '../ui/skeleton';
 
-export default function MovieInfoSkeleton() {
+export function MovieInfoSkeleton() {
   return (
     <div className='flex flex-col'>
       <Skeleton className='h-[36px] md:h-[60px] w-56 my-2' />

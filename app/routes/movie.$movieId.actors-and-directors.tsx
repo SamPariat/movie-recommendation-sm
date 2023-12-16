@@ -3,8 +3,10 @@ import { Await, MetaFunction, useLoaderData } from '@remix-run/react';
 import { Suspense } from 'react';
 import { getMovieCast } from '~/api';
 
-import ActorDirectorCard from '~/components/cards/actor-director-card';
-import ActorDirectorSkeleton from '~/components/cards/actor-director-skeleton';
+import {
+  ActorDirectorCard,
+  ActorDirectorSkeleton,
+} from '~/components/cards';
 
 export const meta: MetaFunction<typeof loader> = ({ params }) => {
   return [

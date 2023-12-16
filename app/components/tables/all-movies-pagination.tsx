@@ -8,7 +8,7 @@ type AllMoviesPaginationProps = {
   table: Table<IMovieIdAndTitle>;
 };
 
-export default function AllMoviesPagination({
+export function AllMoviesPagination({
   table,
 }: AllMoviesPaginationProps) {
   return (

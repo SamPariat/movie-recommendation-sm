@@ -17,7 +17,7 @@ type MovieCardProps = {
   genres: string[];
 };
 
-export default function MovieCard({
+export function MovieCard({
   id,
   title,
   tagline,
@@ -37,7 +37,7 @@ export default function MovieCard({
         alt={title}
         className='object-cover max-h-48 lg:max-h-96 rounded-md'
       />
-      <Card>
+      <Card className='h-full'>
         <CardHeader>
           <CardTitle>{title}</CardTitle>
           <div className='flex justify-between'>

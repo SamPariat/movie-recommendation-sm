@@ -10,9 +10,8 @@ import {
 import { Suspense } from 'react';
 
 import { getRecommendations } from '~/api';
-import MovieCard from '~/components/cards/movie-card';
-import MovieSkeleton from '~/components/cards/movie-skeleton';
-import DescriptionWithImage from '~/components/hero/description-with-image';
+import { MovieCard, MovieSkeleton } from '~/components/cards';
+import { DescriptionWithImage } from '~/components/hero';
 
 const skeletonId: { id: string }[] = [
   { id: 'movie-skeleton-1' },

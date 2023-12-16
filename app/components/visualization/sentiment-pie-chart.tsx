@@ -1,4 +1,4 @@
-import { Pie, PieChart, ResponsiveContainer, Legend } from 'recharts';
+import { Legend, Pie, PieChart } from 'recharts';
 
 type SentimentPieChartProps = {
   data: { name: string; value: number }[];
@@ -10,9 +10,7 @@ const renderText = (value: string, entry: any) => {
   );
 };
 
-export default function SentimentPieChart({
-  data,
-}: SentimentPieChartProps) {
+export function SentimentPieChart({ data }: SentimentPieChartProps) {
   return (
     <PieChart width={800} height={400}>
       <Legend

@@ -19,7 +19,7 @@ type TopTrendingCardProps = {
   genres: (number | string)[];
 };
 
-export default function TopTrendingCard({
+export function TopTrendingCard({
   id,
   title,
   tagline,

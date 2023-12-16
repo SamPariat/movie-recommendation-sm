@@ -10,6 +10,7 @@ import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
 import { commitSession, getSession } from '~/sessions';
+import { formFieldSchema } from '~/types';
 
 export const meta: MetaFunction = () => {
   return [
@@ -20,23 +21,6 @@ export const meta: MetaFunction = () => {
     },
   ];
 };
-
-const formFieldSchema = z.object({
-  email: z.string().email({
-    message: 'Email must be valid',
-  }),
-  password: z.string().min(7, {
-    message: 'Password must be at least 7 characters',
-  }),
-  name: z
-    .union([
-      z.string().length(0),
-      z.string().min(3, {
-        message: 'Name must be at least 3 characters',
-      }),
-    ])
-    .optional(),
-});
 
 export async function action({ request }: ActionFunctionArgs) {
   const session = await getSession(request.headers.get('Cookie'));
@@ -57,6 +41,7 @@ export async function action({ request }: ActionFunctionArgs) {
       : await login(email as string, password as string);
 
     session.set('access_token', tokens.access_token);
+    session.set('refresh_token', tokens.refresh_token);
 
     return redirect('/', {
       headers: {

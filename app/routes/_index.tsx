@@ -1,7 +1,9 @@
 import type { MetaFunction } from '@remix-run/node';
 
-import CineSuggestIntro from '~/components/hero/cinesuggest-intro';
-import DescriptionWithImage from '~/components/hero/description-with-image';
+import {
+  CineSuggestIntro,
+  DescriptionWithImage,
+} from '~/components/hero';
 
 export const meta: MetaFunction = () => {
   return [

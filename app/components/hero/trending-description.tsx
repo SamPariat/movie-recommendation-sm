@@ -1,4 +1,4 @@
-export default function TrendingDescription() {
+export function TrendingDescription() {
   return (
     <div className='grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 space-x-4'>
       <div className='col-span-1 md:col-span-2 xl:col-span-3'>

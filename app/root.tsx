@@ -9,7 +9,7 @@ import {
   ScrollRestoration,
 } from '@remix-run/react';
 
-import TopNav from './components/navigation/top-nav';
+import { TopNav } from './components/navigation';
 import tailwind from './tailwind.css';
 
 export const links: LinksFunction = () => [

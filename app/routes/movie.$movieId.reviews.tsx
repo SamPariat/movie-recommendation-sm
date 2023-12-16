@@ -1,6 +1,7 @@
 import { LoaderFunctionArgs, defer } from '@remix-run/node';
 import { MetaFunction } from '@remix-run/react';
-import SentimentPieChart from '~/components/visualization/sentiment-pie-chart';
+
+import { SentimentPieChart } from '~/components/visualization';
 
 const data = [
   { name: 'Positive', value: 69, fill: '#9E1953' },

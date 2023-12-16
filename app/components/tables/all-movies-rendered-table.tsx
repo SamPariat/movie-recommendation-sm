@@ -18,7 +18,7 @@ type AllMoviesRenderedTableProps = {
   table: TanstackTable<IMovieIdAndTitle>;
 };
 
-export default function AllMoviesRenderedTable({
+export function AllMoviesRenderedTable({
   table,
 }: AllMoviesRenderedTableProps) {
   const navigate = useNavigate();

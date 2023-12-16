@@ -8,7 +8,7 @@ type MovieInfoCardProps = {
   info: IMovieInfo;
 };
 
-export default function MovieInfoCard({ info }: MovieInfoCardProps) {
+export function MovieInfoCard({ info }: MovieInfoCardProps) {
   const navigate = useNavigate();
 
   return (

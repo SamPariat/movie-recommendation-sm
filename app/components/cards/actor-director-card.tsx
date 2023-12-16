@@ -7,7 +7,7 @@ type ActorDirectorCardProps = {
   role: string;
 };
 
-export default function ActorDirectorCard({
+export function ActorDirectorCard({
   imagePath,
   name,
   role,

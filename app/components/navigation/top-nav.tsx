@@ -53,7 +53,7 @@ const abouts: {
   },
 ];
 
-export default function TopNav() {
+export function TopNav() {
   const navigate = useNavigate();
 
   return (

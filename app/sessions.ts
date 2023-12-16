@@ -2,6 +2,7 @@ import { createCookieSessionStorage } from '@remix-run/node';
 
 type SessionData = {
   access_token: string;
+  refresh_token: string;
 };
 
 type SessionFlashData = { error: string };
@@ -11,7 +12,8 @@ const { commitSession, destroySession, getSession } =
     cookie: {
       name: 'token',
       secure: true,
-      maxAge: 60 * 15,
+      maxAge: 60 * 60 * 24,
+      secrets: [process.env.COOKIE_SECRET ?? ''],
     },
   });
 
