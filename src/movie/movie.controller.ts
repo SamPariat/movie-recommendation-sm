@@ -1,40 +1,59 @@
 import {
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   ParseIntPipe,
   Query,
 } from '@nestjs/common';
 
 import { MovieService } from './movie.service';
+import {
+  IAllMovies,
+  ICastInfo,
+  IMovieInfo,
+  ITrendingInfo,
+} from './types';
 
 @Controller('movie')
 export class MovieController {
   constructor(private movieService: MovieService) {}
 
   @Get('info')
+  @HttpCode(HttpStatus.OK)
   getMovieInformationById(
     @Query('id', ParseIntPipe) id: number,
-  ) {
+  ): Promise<IMovieInfo> {
     return this.movieService.getMovieInformationById(id);
   }
 
   @Get('cast')
-  getMovieCastById(@Query('id', ParseIntPipe) id: number) {
+  @HttpCode(HttpStatus.OK)
+  getMovieCastById(
+    @Query('id', ParseIntPipe) id: number,
+  ): Promise<ICastInfo> {
     return this.movieService.getMovieCastById(id);
   }
 
   @Get('top-5-trending')
-  getTopFiveTrending() {
+  @HttpCode(HttpStatus.OK)
+  getTopFiveTrending(): Promise<{
+    top5Trending: ITrendingInfo[];
+  }> {
     return this.movieService.getTopFiveTrending();
   }
 
   @Get('latest-trending')
-  getLatestTrending() {
+  @HttpCode(HttpStatus.OK)
+  getLatestTrending(): Promise<{
+    latestTrending: ITrendingInfo;
+  }> {
     return this.movieService.getLatestTrending();
   }
 
   @Get('all')
-  getAllMovies() {
+  @HttpCode(HttpStatus.OK)
+  getAllMovies(): Promise<IAllMovies> {
     return this.movieService.getAllMovies();
   }
 }

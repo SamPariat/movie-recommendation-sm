@@ -10,21 +10,28 @@ datasource db {
   url      = env("ATLAS_CONNECTION_URL")
 }
 
-model movieusers {
+model MovieUsers {
   id                 String         @id @default(auto()) @map("_id") @db.ObjectId
   email              String         @unique
   password           String
   name               String
   thumbnailUrl       String?
   hashedRefreshToken String?
-  moviereview        moviereviews[]
+  moviereview        MovieReviews[]
 }
 
-model moviereviews {
+model MovieReviews {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   review      String
   sentiment   String
-  movie       String
-  movieuser   movieusers @relation(references: [id], fields: [movieuserId])
-  movieuserId String     @db.ObjectId
+  movieId     Int
+  movieUser   MovieUsers @relation(references: [id], fields: [movieUserId])
+  movieUserId String     @db.ObjectId
+}
+
+model MovieSentiment {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  movieId  Int    @unique
+  positive Int    @default(0)
+  negative Int    @default(0)
 }

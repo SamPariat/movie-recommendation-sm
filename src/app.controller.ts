@@ -1,4 +1,9 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 
 import { AppService } from './app.service';
 
@@ -7,7 +12,8 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  appRunning() {
+  @HttpCode(HttpStatus.OK)
+  appRunning(): { test: string } {
     return this.appService.appRunning();
   }
 }

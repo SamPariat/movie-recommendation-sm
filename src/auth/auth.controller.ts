@@ -14,6 +14,7 @@ import {
   AccessTokenGuard,
   RefreshTokenGuard,
 } from './guard';
+import { ITokens } from './types';
 
 @Controller('auth')
 export class AuthController {
@@ -21,20 +22,20 @@ export class AuthController {
 
   @Post('local/login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() dto: LoginDto) {
+  async login(@Body() dto: LoginDto): Promise<ITokens> {
     return this.authService.login(dto);
   }
 
   @Post('local/signup')
   @HttpCode(HttpStatus.CREATED)
-  async signup(@Body() dto: SignupDto) {
+  async signup(@Body() dto: SignupDto): Promise<ITokens> {
     return this.authService.signup(dto);
   }
 
   @UseGuards(AccessTokenGuard)
   @Post('local/logout')
   @HttpCode(HttpStatus.OK)
-  async logout(@GetUserId() userId: string) {
+  async logout(@GetUserId() userId: string): Promise<void> {
     return this.authService.logout(userId);
   }
 
@@ -44,7 +45,7 @@ export class AuthController {
   async refreshTokens(
     @GetUser('refreshToken') refreshToken: string,
     @GetUserId() userId: string,
-  ) {
+  ): Promise<ITokens> {
     return this.authService.refreshTokens(
       userId,
       refreshToken,

@@ -23,7 +23,7 @@ export class AuthService {
   async login(dto: LoginDto): Promise<ITokens> {
     try {
       const existingMovieUser =
-        await this.prismaService.movieusers.findUnique({
+        await this.prismaService.movieUsers.findUnique({
           where: {
             email: dto.email,
           },
@@ -65,7 +65,7 @@ export class AuthService {
       const hashedPassword = await argon.hash(dto.password);
 
       const newMovieUser =
-        await this.prismaService.movieusers.create({
+        await this.prismaService.movieUsers.create({
           data: {
             email: dto.email,
             password: hashedPassword,
@@ -96,7 +96,7 @@ export class AuthService {
 
   async logout(userId: string) {
     try {
-      await this.prismaService.movieusers.update({
+      await this.prismaService.movieUsers.update({
         where: {
           id: userId,
           hashedRefreshToken: {
@@ -118,7 +118,7 @@ export class AuthService {
   ) {
     try {
       const existingMovieUser =
-        await this.prismaService.movieusers.findUnique({
+        await this.prismaService.movieUsers.findUnique({
           where: {
             id: userId,
           },
@@ -157,7 +157,7 @@ export class AuthService {
     const hashedRefreshToken =
       await argon.hash(refreshToken);
 
-    await this.prismaService.movieusers.update({
+    await this.prismaService.movieUsers.update({
       where: {
         id: userId,
       },
@@ -174,7 +174,7 @@ export class AuthService {
         email,
       },
       {
-        expiresIn: '15s',
+        expiresIn: '15m',
         secret: this.configService.get<string>(
           'JWT_ACCESS_TOKEN_SECRET',
         ),

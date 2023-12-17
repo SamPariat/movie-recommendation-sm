@@ -10,6 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { MovieReviews } from '@prisma/client';
 
 import { GetUserId } from '../auth/decorator';
 import { AccessTokenGuard } from '../auth/guard';
@@ -19,39 +20,46 @@ import { SentimentService } from './sentiment.service';
 export class SentimentController {
   constructor(private sentimentService: SentimentService) {}
 
-  @Get('get-reviews/:movie')
+  @Get('get-reviews/:id')
+  @HttpCode(HttpStatus.OK)
   async getReviews(
-    @Param('movie') movie: string,
+    @Param('id', ParseIntPipe) id: number,
     @Query('limit', ParseIntPipe) limit: number,
     @Query('page', ParseIntPipe) page: number,
-  ) {
+  ): Promise<{ reviews: MovieReviews[] }> {
     return this.sentimentService.getReviews(
-      movie,
+      id,
       page,
       limit,
     );
   }
 
-  @Get('review-analytics/:movie')
+  @Get('review-analytics/:id')
+  @HttpCode(HttpStatus.OK)
   async getSentimentDataOfMovie(
-    @Param('movie') movie: string,
-  ) {
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<
+    {
+      name: string;
+      value: number;
+    }[]
+  > {
     return this.sentimentService.getSentimentDataOfMovie(
-      movie,
+      id,
     );
   }
 
   @UseGuards(AccessTokenGuard)
-  @Post('save-review/:movie')
+  @Post('save-review/:id')
   @HttpCode(HttpStatus.CREATED)
   async saveReview(
-    @Param('movie') movie: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body('review') review: string,
     @GetUserId() userId: string,
-  ) {
-    return this.sentimentService.addReview(
+  ): Promise<MovieReviews> {
+    return this.sentimentService.saveReview(
+      id,
       review,
-      movie,
       userId,
     );
   }

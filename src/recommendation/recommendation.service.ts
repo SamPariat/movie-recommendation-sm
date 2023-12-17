@@ -23,16 +23,19 @@ export class RecommendationService {
     private movieUtilsService: MovieUtilsService,
   ) {}
 
-  async getRecommendation(movie: string) {
+  async getRecommendation(movie: string): Promise<{
+    recommendations: IMovieInfo[];
+  }> {
     try {
       const modelBaseUrl = this.configService.get<string>(
         'MODEL_BASE_URL',
       );
 
-      const cachedRecommendations: IMovieInfo[] =
-        await this.cacheManager.get(
-          `recommendations:${movie}`,
-        );
+      const cachedRecommendations: {
+        recommendations: IMovieInfo[];
+      } = await this.cacheManager.get(
+        `recommendations:${movie}`,
+      );
 
       if (cachedRecommendations)
         return cachedRecommendations;

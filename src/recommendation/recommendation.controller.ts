@@ -1,5 +1,12 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Query,
+} from '@nestjs/common';
 
+import { IMovieInfo } from '../movie/types';
 import { RecommendationService } from './recommendation.service';
 
 @Controller('model')
@@ -9,7 +16,12 @@ export class RecommendationController {
   ) {}
 
   @Get('recommendation')
-  async getRecommendation(@Query('movie') movie: string) {
+  @HttpCode(HttpStatus.OK)
+  async getRecommendation(
+    @Query('movie') movie: string,
+  ): Promise<{
+    recommendations: IMovieInfo[];
+  }> {
     return this.recommendationService.getRecommendation(
       movie,
     );
