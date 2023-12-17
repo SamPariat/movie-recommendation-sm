@@ -20,6 +20,14 @@ import { SentimentService } from './sentiment.service';
 export class SentimentController {
   constructor(private sentimentService: SentimentService) {}
 
+  @Get('get-all-reviews/:id')
+  @HttpCode(HttpStatus.OK)
+  async getAllReviews(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<{ reviews: MovieReviews[] }> {
+    return this.sentimentService.getAllReviews(id);
+  }
+
   @Get('get-reviews/:id')
   @HttpCode(HttpStatus.OK)
   async getReviews(

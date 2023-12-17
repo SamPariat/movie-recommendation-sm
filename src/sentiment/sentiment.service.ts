@@ -20,6 +20,19 @@ export class SentimentService {
     private httpService: HttpService,
   ) {}
 
+  async getAllReviews(
+    movieId: number,
+  ): Promise<{ reviews: MovieReviews[] }> {
+    const reviews =
+      await this.prismaService.movieReviews.findMany({
+        where: {
+          movieId,
+        },
+      });
+
+    return { reviews };
+  }
+
   async getReviews(
     movieId: number,
     page: number,
