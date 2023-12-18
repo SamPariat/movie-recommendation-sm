@@ -23,7 +23,7 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const info = getInfo(parseInt(params.movieId as string));
+  const info = getInfo(params.movieId as string);
 
   return defer({
     info,

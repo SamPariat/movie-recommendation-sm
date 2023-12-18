@@ -1,16 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ActionFunctionArgs, json, redirect } from '@remix-run/node';
-import { Form, MetaFunction, useNavigation } from '@remix-run/react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
+import { MetaFunction } from '@remix-run/react';
+import { getValidatedFormData } from 'remix-hook-form';
 
 import { login, signup } from '~/api';
-import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
-import { Label } from '~/components/ui/label';
+import { AuthForm } from '~/components/forms';
 import { commitSession, getSession } from '~/sessions';
-import { formFieldSchema } from '~/types';
+import { authFormSchema } from '~/types';
 
 export const meta: MetaFunction = () => {
   return [
@@ -25,11 +21,25 @@ export const meta: MetaFunction = () => {
 export async function action({ request }: ActionFunctionArgs) {
   const session = await getSession(request.headers.get('Cookie'));
 
-  const formData = await request.formData();
+  const {
+    errors,
+    data,
+    receivedValues: defaultValues,
+  } = await getValidatedFormData(
+    request,
+    zodResolver(authFormSchema)
+  );
 
-  const email = formData.get('email');
-  const password = formData.get('password');
-  const name = formData.get('name');
+  if (errors) {
+    return json({
+      errors,
+      defaultValues,
+    });
+  }
+
+  const email: string = data.email;
+  const password: string = data.password;
+  const name: string | undefined = data.name;
 
   try {
     const tokens = name
@@ -54,15 +64,6 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Login() {
-  const {
-    register,
-    formState: { errors },
-  } = useForm<z.infer<typeof formFieldSchema>>({
-    resolver: zodResolver(formFieldSchema),
-  });
-  const navigation = useNavigation();
-  const [isLogin, setIsLogin] = useState<boolean>(true);
-
   return (
     <div className='flex flex-col'>
       <div className='grid grid-cols-3 justify-center items-center'>
@@ -72,64 +73,7 @@ export default function Login() {
           className='col-span-3 sm:col-span-1 items-center h-48 sm:h-auto'
         />
         <div className='col-span-3 sm:col-span-2 px-8'>
-          <Form className='space-y-2' method='post'>
-            <div className='max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl space-y-2'>
-              <Label htmlFor='email'>Email</Label>
-              <Input
-                type='email'
-                id='email'
-                placeholder='Email'
-                {...register('email')}
-              />
-              <p className='text-xs font-semibold text-destructive'>
-                {errors.email?.message}
-              </p>
-            </div>
-            <div className='max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl space-y-2'>
-              <Label htmlFor='password'>Password</Label>
-              <Input
-                type='password'
-                id='password'
-                placeholder='Password'
-                {...register('password')}
-              />
-              <p className='text-xs font-semibold text-destructive'>
-                {errors.password?.message}
-              </p>
-            </div>
-            {!isLogin && (
-              <div className='max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl space-y-2'>
-                <Label htmlFor='name'>Name</Label>
-                <Input
-                  type='text'
-                  id='name'
-                  placeholder='Name'
-                  {...register('name')}
-                />
-                <p className='text-xs font-semibold text-destructive'>
-                  {errors.name?.message}
-                </p>
-              </div>
-            )}
-            <Button
-              size='sm'
-              disabled={navigation.state === 'submitting'}
-            >
-              {navigation.state === 'idle'
-                ? isLogin
-                  ? 'Login'
-                  : 'Register'
-                : 'Logging in...'}
-            </Button>
-          </Form>
-          <p
-            className='text-sm mt-4 cursor-pointer underline underline-offset-4'
-            onClick={() => setIsLogin(!isLogin)}
-          >
-            {isLogin
-              ? "Don't have an account? Create one."
-              : 'Already have an account? Log in instead.'}
-          </p>
+          <AuthForm />
         </div>
       </div>
     </div>

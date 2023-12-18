@@ -47,4 +47,20 @@ const logout = async (): Promise<void> => {
   await request<void>('post', '/auth/local/logout');
 };
 
-export { login, logout, profile, signup };
+const refreshToken = async (
+  refresh_token: string
+): Promise<ITokens> => {
+  const response = await request<ITokens>(
+    'post',
+    '/auth/refresh',
+    undefined,
+    undefined,
+    {
+      Authorization: `Bearer ${refresh_token}`,
+    }
+  );
+
+  return response.data;
+};
+
+export { login, logout, profile, signup, refreshToken };

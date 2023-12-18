@@ -34,12 +34,10 @@ export default function Recommend() {
       <h1 className='text-5xl md:text-6xl lg:text-7xl font-bold mb-4'>
         Find Similar Movies
       </h1>
-
       <h4 className='text-3xl md:text-4xl lg:text-5xl font-semibold my-8'>
         Uncover similar movies crafted just for you with this feature
         - Where entertainment meets creative recommendations!
       </h4>
-
       <Suspense
         fallback={
           <h5 className='text-xl font-medium m-auto my-4'>

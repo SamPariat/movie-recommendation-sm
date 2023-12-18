@@ -22,7 +22,7 @@ const abouts: {
     title: 'Frontend',
     to: '#',
     description:
-      'Frontend created using Remix.run + shadcn/ui + Tailwind + Spline.',
+      'Frontend created using Remix + shadcn/ui + Tailwind.',
   },
   {
     title: 'Backend',
@@ -38,7 +38,7 @@ const abouts: {
   {
     title: 'App',
     to: '#',
-    description: 'Flutter leveraged for cross-platform development.',
+    description: 'Flutter leveraged for cross-platform development. (In beta)',
   },
   {
     title: 'MongoDB',

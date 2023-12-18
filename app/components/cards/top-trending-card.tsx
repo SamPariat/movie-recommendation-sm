@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
+import { Variants, motion } from 'framer-motion';
 
 type TopTrendingCardProps = {
   id: number;
@@ -17,6 +18,12 @@ type TopTrendingCardProps = {
   adult: boolean;
   imagePath: string;
   genres: (number | string)[];
+};
+
+const topTrendingCardVariants: Variants = {
+  hover: {
+    opacity: 0.8,
+  },
 };
 
 export function TopTrendingCard({
@@ -31,10 +38,12 @@ export function TopTrendingCard({
 
   return (
     <div className='flex flex-col mx-0 md:mx-10 xl:mx-16'>
-      <img
+      <motion.img
         src={imagePath}
         alt={title}
         className='object-cover max-h-96 rounded-lg'
+        variants={topTrendingCardVariants}
+        whileHover='hover'
       />
       <Card>
         <CardHeader>
@@ -67,7 +76,12 @@ export function TopTrendingCard({
           >
             Movie Information
           </Button>
-          <Button size='sm' className='font-semibold' variant='ghost'>
+          <Button
+            size='sm'
+            className='font-semibold'
+            variant='ghost'
+            onClick={() => navigate(`/movie/${id}/reviews`)}
+          >
             User Reviews
           </Button>
         </CardFooter>

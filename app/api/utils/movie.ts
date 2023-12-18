@@ -23,7 +23,7 @@ const getTop5Trending = async (): Promise<ITrendingInfo[]> => {
   return top5TrendingData.data.top5Trending;
 };
 
-const getMovieCast = async (movieId: number): Promise<ICastInfo> => {
+const getMovieCast = async (movieId: string): Promise<ICastInfo> => {
   const movieCast = await request<ICastInfo>('get', '/movie/cast', {
     id: movieId,
   });
@@ -37,7 +37,7 @@ const getAll = async (): Promise<IMovieIdAndTitle[]> => {
   return allMovies.data.dicc_arr;
 };
 
-const getInfo = async (movieId: number): Promise<IMovieInfo> => {
+const getInfo = async (movieId: string): Promise<IMovieInfo> => {
   const movieInfo = await request<IMovieInfo>('get', '/movie/info', {
     id: movieId,
   });

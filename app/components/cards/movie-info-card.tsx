@@ -36,12 +36,15 @@ export function MovieInfoCard({ info }: MovieInfoCardProps) {
       <p className='text-sm md:text-base font-thin md:font-extralight line-clamp-4 lg:line-clamp-none max-w-2xl'>
         {info.overview}
       </p>
-      <div className='flex flex-row my-4'>
+      <div className='flex flex-col sm:flex-row my-4 gap-4'>
         <Button
           variant='outline'
           onClick={() => navigate('actors-and-directors')}
         >
           Cast Information
+        </Button>
+        <Button variant='outline' onClick={() => navigate('reviews')}>
+          User Reviews
         </Button>
       </div>
     </div>

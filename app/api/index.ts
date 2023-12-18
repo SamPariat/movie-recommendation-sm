@@ -1,4 +1,8 @@
-import axios, { AxiosResponse, Method } from 'axios';
+import axios, {
+  AxiosResponse,
+  Method,
+  RawAxiosRequestHeaders,
+} from 'axios';
 
 export * from './utils';
 
@@ -10,13 +14,15 @@ const request = <T>(
   method: Method,
   url: string,
   params?: any,
-  data?: any
+  data?: any,
+  headers?: RawAxiosRequestHeaders
 ): Promise<AxiosResponse<T>> => {
   return api.request({
     method,
     url,
     params,
     data,
+    headers,
     withCredentials: true,
   });
 };

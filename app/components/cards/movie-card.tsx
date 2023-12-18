@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
+import { Variants, motion } from 'framer-motion';
 
 type MovieCardProps = {
   id: number;
@@ -15,6 +16,13 @@ type MovieCardProps = {
   adult: boolean;
   imagePath: string;
   genres: string[];
+};
+
+const movieCardVariants: Variants = {
+  hover: {
+    opacity: 0.8,
+    y: -5,
+  },
 };
 
 export function MovieCard({
@@ -28,9 +36,11 @@ export function MovieCard({
   const navigate = useNavigate();
 
   return (
-    <div
+    <motion.div
       className='flex flex-col h-auto cursor-pointer'
       onClick={() => navigate(`/movie/${id}`)}
+      variants={movieCardVariants}
+      whileHover='hover'
     >
       <img
         src={imagePath}
@@ -58,6 +68,6 @@ export function MovieCard({
           <p className='text-xs line-clamp-2'>{tagline}</p>
         </CardContent>
       </Card>
-    </div>
+    </motion.div>
   );
 }

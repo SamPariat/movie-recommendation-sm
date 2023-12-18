@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-const formFieldSchema = z.object({
+const authFormSchema = z.object({
   email: z.string().email({
     message: 'Email must be valid',
   }),
@@ -17,4 +17,15 @@ const formFieldSchema = z.object({
     .optional(),
 });
 
-export { formFieldSchema };
+type AuthFormData = z.infer<typeof authFormSchema>;
+
+const reviewFormSchema = z.object({
+  review: z.string().min(25, {
+    message: 'Review must be at least 25 characters',
+  }),
+});
+
+type ReviewFormData = z.infer<typeof reviewFormSchema>;
+
+export { authFormSchema, reviewFormSchema };
+export type { AuthFormData, ReviewFormData };

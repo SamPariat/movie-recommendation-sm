@@ -30,7 +30,7 @@ const skeletonId: { id: string }[] = [
 ];
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const movieCast = getMovieCast(parseInt(params.movieId as string));
+  const movieCast = getMovieCast(params.movieId as string);
 
   return defer({
     movieCast,
