@@ -41,7 +41,8 @@ export function CineSuggestIntro() {
       <motion.img
         src='./images/cinesuggest-3d-image-red.png'
         alt='CineSuggest.png'
-        className='object-contain h-96 md:col-span-2 lg:col-span-3 lg:col-start-4'
+        className='object-contain h-0 md:h-96 md:col-span-2 lg:col-span-3 lg:col-start-4'
+        loading='lazy'
         variants={imageVariants}
         whileHover='hover'
       />

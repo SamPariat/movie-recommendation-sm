@@ -46,6 +46,7 @@ export function MovieCard({
         src={imagePath}
         alt={title}
         className='object-cover max-h-48 lg:max-h-96 rounded-md'
+        loading='lazy'
       />
       <Card className='h-full'>
         <CardHeader>

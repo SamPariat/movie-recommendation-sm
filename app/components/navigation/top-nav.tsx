@@ -10,7 +10,6 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '~/components/ui/navigation-menu';
-
 import { ListItem } from './list-item';
 
 const abouts: {

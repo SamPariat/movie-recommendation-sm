@@ -32,9 +32,10 @@ export function DescriptionWithImage({
       <motion.img
         src={src}
         alt={alt}
-        className='object-contain h-96 md:col-span-2 lg:col-span-3 lg:col-start-4'
+        className='object-contain h-0 md:h-96 md:col-span-2 lg:col-span-3 lg:col-start-4'
         variants={imageVariants}
         whileHover='hover'
+        loading='lazy'
       />
     </div>
   );

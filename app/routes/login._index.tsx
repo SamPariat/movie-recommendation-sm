@@ -71,6 +71,7 @@ export default function Login() {
           src='./images/login-3d.png'
           alt='Login.png'
           className='col-span-3 sm:col-span-1 items-center h-48 sm:h-auto'
+          loading='lazy'
         />
         <div className='col-span-3 sm:col-span-2 px-8'>
           <AuthForm />

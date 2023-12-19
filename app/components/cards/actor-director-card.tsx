@@ -18,6 +18,7 @@ export function ActorDirectorCard({
         src={imagePath}
         alt={name}
         className='object-cover max-h-60 lg:max-h-80 rounded-md'
+        loading='lazy'
       />
       <Card>
         <CardHeader>
@@ -26,7 +27,9 @@ export function ActorDirectorCard({
           </CardTitle>
         </CardHeader>
         <CardContent className='w-fit m-auto'>
-          <Badge className='text-sm md:text-lg text-center'>{role}</Badge>
+          <Badge className='text-sm md:text-lg text-center'>
+            {role}
+          </Badge>
         </CardContent>
       </Card>
     </div>

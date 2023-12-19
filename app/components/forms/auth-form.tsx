@@ -80,7 +80,7 @@ export const AuthForm = () => {
         </Button>
       </Form>
       <p
-        className='text-sm mt-4 cursor-pointer underline underline-offset-4'
+        className='text-sm mt-4 cursor-pointer underline underline-offset-4 w-fit'
         onClick={() => setIsLogin(!isLogin)}
       >
         {isLogin

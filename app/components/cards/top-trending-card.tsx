@@ -42,6 +42,7 @@ export function TopTrendingCard({
         src={imagePath}
         alt={title}
         className='object-cover max-h-96 rounded-lg'
+        loading='lazy'
         variants={topTrendingCardVariants}
         whileHover='hover'
       />

@@ -10,6 +10,7 @@ import {
 } from '@remix-run/react';
 
 import { TopNav } from './components/navigation';
+import { Toaster } from './components/ui/toaster';
 import tailwind from './tailwind.css';
 
 export const links: LinksFunction = () => [
@@ -36,6 +37,7 @@ export default function App() {
         <main className='flex flex-col px-6 md:px-12 mt-24 space-y-4'>
           <Outlet />
         </main>
+        <Toaster />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
