@@ -42,8 +42,11 @@ export async function action({
 }: ActionFunctionArgs) {
   const session = await getSession(request.headers.get('Cookie'));
 
-  if (!session) {
-    return redirect('/login');
+  if (!session.has('access_token') || !session.has('refresh_token')) {
+    return redirect('/login', {
+      status: 401,
+      statusText: "Can't add review without an account.",
+    });
   }
 
   const {

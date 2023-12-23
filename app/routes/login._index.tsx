@@ -2,9 +2,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ActionFunctionArgs, json, redirect } from '@remix-run/node';
 import { MetaFunction } from '@remix-run/react';
 import { getValidatedFormData } from 'remix-hook-form';
+import { toast } from 'sonner';
 
 import { login, signup } from '~/api';
-import { AuthForm } from '~/components/forms';
+import { AuthForm, RegisterForm } from '~/components/forms';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '~/components/ui/tabs';
 import { commitSession, getSession } from '~/sessions';
 import { authFormSchema } from '~/types';
 
@@ -40,9 +47,12 @@ export async function action({ request }: ActionFunctionArgs) {
   const email: string = data.email;
   const password: string = data.password;
   const name: string | undefined = data.name;
+  const confirmPassword: string | undefined = data.confirmPassword;
+
+  const isLogin = !name && !confirmPassword;
 
   try {
-    const tokens = name
+    const tokens = !isLogin
       ? await signup(
           email as string,
           password as string,
@@ -53,13 +63,17 @@ export async function action({ request }: ActionFunctionArgs) {
     session.set('access_token', tokens.access_token);
     session.set('refresh_token', tokens.refresh_token);
 
+    toast.success(
+      `Successfully ${isLogin ? 'logged in' : 'registered'}.`
+    );
+
     return redirect('/', {
       headers: {
         'Set-Cookie': await commitSession(session),
       },
     });
   } catch (error) {
-    return json({ error });
+    throw json({ error });
   }
 }
 
@@ -73,8 +87,22 @@ export default function Login() {
           className='col-span-3 sm:col-span-1 items-center h-48 sm:h-auto'
           loading='lazy'
         />
-        <div className='col-span-3 sm:col-span-2 px-8'>
-          <AuthForm />
+        <div className='col-span-3 sm:col-span-2 px-4 my-4'>
+          <Tabs
+            defaultValue='login'
+            className='w-[250px] md:w-[600px]'
+          >
+            <TabsList className='grid w-full grid-cols-2'>
+              <TabsTrigger value='login'>Login</TabsTrigger>
+              <TabsTrigger value='register'>Register</TabsTrigger>
+            </TabsList>
+            <TabsContent value='login'>
+              <AuthForm />
+            </TabsContent>
+            <TabsContent value='register'>
+              <RegisterForm />
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ type SessionData = {
   refresh_token: string;
 };
 
-type SessionFlashData = { error: string };
+type SessionFlashData = { error: string; message: string };
 
 const { commitSession, destroySession, getSession } =
   createCookieSessionStorage<SessionData, SessionFlashData>({

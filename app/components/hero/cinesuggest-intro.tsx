@@ -16,7 +16,7 @@ export function CineSuggestIntro() {
   return (
     <div className='grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 space-x-4'>
       <div className='col-span-1 md:col-span-2 xl:col-span-3'>
-        <h1 className='font-bold text-4xl sm:text-6xl lg:text-7xl xl:text-8xl mb-8'>
+        <h1 className='font-bold text-5xl sm:text-6xl lg:text-7xl xl:text-8xl mb-8'>
           CineSuggest
         </h1>
         <h2 className='font-semibold text-xl sm:text-3xl lg:text-4xl mb-4'>
@@ -27,7 +27,7 @@ export function CineSuggestIntro() {
         <Button
           size='lg'
           variant='default'
-          className='font-semibold text-lg'
+          className='font-semibold text-md md:text-lg'
           onClick={() => navigate('/trending')}
         >
           Get Started

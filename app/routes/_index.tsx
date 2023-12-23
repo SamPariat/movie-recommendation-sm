@@ -1,6 +1,7 @@
 import type { MetaFunction } from '@remix-run/node';
 
 import {
+  AppDescription,
   CineSuggestIntro,
   DescriptionWithImage,
 } from '~/components/hero';
@@ -35,6 +36,7 @@ export default function Index() {
         src='./images/naive-bayes-3d.png'
         alt='NaiveBayes.png'
       />
+      <AppDescription />
     </>
   );
 }

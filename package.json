@@ -32,10 +32,12 @@
     "framer-motion": "^10.16.5",
     "isbot": "^3.6.8",
     "lucide-react": "^0.293.0",
+    "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recharts": "^2.10.3",
     "remix-hook-form": "^3.2.3",
+    "sonner": "^1.2.4",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"
