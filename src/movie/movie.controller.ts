@@ -9,10 +9,10 @@ import {
 
 import { MovieService } from './movie.service';
 import {
-  IAllMovies,
-  ICastInfo,
-  IMovieInfo,
-  ITrendingInfo,
+  AllMovies,
+  CastInfo,
+  MovieInfo,
+  TrendingInfo,
 } from './types';
 
 @Controller('movie')
@@ -23,7 +23,7 @@ export class MovieController {
   @HttpCode(HttpStatus.OK)
   getMovieInformationById(
     @Query('id', ParseIntPipe) id: number,
-  ): Promise<IMovieInfo> {
+  ): Promise<MovieInfo> {
     return this.movieService.getMovieInformationById(id);
   }
 
@@ -31,14 +31,14 @@ export class MovieController {
   @HttpCode(HttpStatus.OK)
   getMovieCastById(
     @Query('id', ParseIntPipe) id: number,
-  ): Promise<ICastInfo> {
+  ): Promise<CastInfo> {
     return this.movieService.getMovieCastById(id);
   }
 
   @Get('top-5-trending')
   @HttpCode(HttpStatus.OK)
   getTopFiveTrending(): Promise<{
-    top5Trending: ITrendingInfo[];
+    top5Trending: TrendingInfo[];
   }> {
     return this.movieService.getTopFiveTrending();
   }
@@ -46,14 +46,14 @@ export class MovieController {
   @Get('latest-trending')
   @HttpCode(HttpStatus.OK)
   getLatestTrending(): Promise<{
-    latestTrending: ITrendingInfo;
+    latestTrending: TrendingInfo;
   }> {
     return this.movieService.getLatestTrending();
   }
 
   @Get('all')
   @HttpCode(HttpStatus.OK)
-  getAllMovies(): Promise<IAllMovies> {
+  getAllMovies(): Promise<AllMovies> {
     return this.movieService.getAllMovies();
   }
 }

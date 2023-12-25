@@ -12,10 +12,10 @@ import { Cache } from 'cache-manager';
 import { ErrorMessages } from '../constants';
 import { MovieUtilsService } from './movie-utils/movie-utils.service';
 import {
-  IAllMovies,
-  ICastInfo,
-  IMovieInfo,
-  ITrendingInfo,
+  AllMovies,
+  CastInfo,
+  MovieInfo,
+  TrendingInfo,
 } from './types';
 
 @Injectable()
@@ -29,7 +29,7 @@ export class MovieService {
 
   async getMovieInformationById(
     movieId: number,
-  ): Promise<IMovieInfo> {
+  ): Promise<MovieInfo> {
     const movieInfo =
       await this.movieUtils.getMovieInformationById(
         movieId,
@@ -39,14 +39,14 @@ export class MovieService {
 
   async getMovieCastById(
     movieId: number,
-  ): Promise<ICastInfo> {
+  ): Promise<CastInfo> {
     const movieCast =
       await this.movieUtils.getMovieCastById(movieId);
     return movieCast;
   }
 
   async getTopFiveTrending(): Promise<{
-    top5Trending: ITrendingInfo[];
+    top5Trending: TrendingInfo[];
   }> {
     const top5Trending =
       await this.movieUtils.getTopFiveTrending();
@@ -54,7 +54,7 @@ export class MovieService {
   }
 
   async getLatestTrending(): Promise<{
-    latestTrending: ITrendingInfo;
+    latestTrending: TrendingInfo;
   }> {
     const latestTrending =
       await this.movieUtils.getLatestTrendingMovie();
@@ -66,14 +66,14 @@ export class MovieService {
       'MODEL_BASE_URL',
     );
 
-    const cachedMovies: IAllMovies =
+    const cachedMovies: AllMovies =
       await this.cacheManager.get('movies:dicc_arr');
 
     try {
       if (cachedMovies) return cachedMovies;
 
       const response =
-        await this.httpService.axiosRef.get<IAllMovies>(
+        await this.httpService.axiosRef.get<AllMovies>(
           `${modelBaseUrl}/all-movies`,
         );
 

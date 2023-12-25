@@ -1,50 +1,50 @@
-interface ICommonDetails {
+type CommonDetails = {
   imagePath: string;
-}
+};
 
-interface IMovieCommonDetails extends ICommonDetails {
+type MovieCommonDetails = CommonDetails & {
   id: number;
   adult: boolean;
   tagline: string;
   genres: string[];
   releaseDate: string;
-}
+};
 
-interface IMovieInfo extends IMovieCommonDetails {
+type MovieInfo = MovieCommonDetails & {
   overview: string;
   title: string;
-}
+};
 
-interface IPersonInfo extends ICommonDetails {
+type PersonInfo = CommonDetails & {
   name: string;
   character: string;
-}
+};
 
-interface ICastInfo {
-  actors: IPersonInfo[];
-  director: Omit<IPersonInfo, 'character'>[];
-}
+type CastInfo = {
+  actors: PersonInfo[];
+  director: Omit<PersonInfo, 'character'>[];
+};
 
-interface ITrendingInfo extends IMovieCommonDetails {
+type TrendingInfo = MovieCommonDetails & {
   title: string;
-}
+};
 
-interface IMovieData extends IMovieInfo {
+type MovieData = MovieInfo & {
   title: string;
-}
+};
 
-interface IAllMovies {
+type AllMovies = {
   dicc_arr: {
     id: number;
     title: string;
   }[];
-}
+};
 
 export type {
-  IAllMovies,
-  ICastInfo,
-  IMovieData,
-  IMovieInfo,
-  IPersonInfo,
-  ITrendingInfo,
+  AllMovies,
+  CastInfo,
+  MovieData,
+  MovieInfo,
+  PersonInfo,
+  TrendingInfo,
 };

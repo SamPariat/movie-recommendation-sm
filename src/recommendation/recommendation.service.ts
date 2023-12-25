@@ -12,7 +12,7 @@ import { Cache } from 'cache-manager';
 
 import { ErrorMessages } from '../constants';
 import { MovieUtilsService } from '../movie/movie-utils/movie-utils.service';
-import { IMovieInfo } from '../movie/types';
+import { MovieInfo } from '../movie/types';
 
 @Injectable()
 export class RecommendationService {
@@ -24,7 +24,7 @@ export class RecommendationService {
   ) {}
 
   async getRecommendation(movie: string): Promise<{
-    recommendations: IMovieInfo[];
+    recommendations: MovieInfo[];
   }> {
     try {
       const modelBaseUrl = this.configService.get<string>(
@@ -32,7 +32,7 @@ export class RecommendationService {
       );
 
       const cachedRecommendations: {
-        recommendations: IMovieInfo[];
+        recommendations: MovieInfo[];
       } = await this.cacheManager.get(
         `recommendations:${movie}`,
       );

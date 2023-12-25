@@ -11,10 +11,14 @@ import { AxiosError, AxiosRequestConfig } from 'axios';
 
 import { ErrorMessages } from '../../constants';
 import {
-  ICastInfo,
-  IMovieInfo,
-  ITmdbError,
-  ITrendingInfo,
+  CastInfo,
+  MovieInfo,
+  TmdbError,
+  TmdbGenres,
+  TmdbMovieCredits,
+  TmdbMovieDetails,
+  TmdbTrending,
+  TrendingInfo,
 } from '../types';
 
 @Injectable()
@@ -27,12 +31,11 @@ export class MovieUtilsService {
   async getGenresObject(): Promise<Record<number, string>> {
     const config = this.getConfig();
 
-    const response = await this.httpService.axiosRef.get<{
-      genres: { id: number; name: string }[];
-    }>(
-      `https://api.themoviedb.org/3/genre/movie/list`,
-      config,
-    );
+    const response =
+      await this.httpService.axiosRef.get<TmdbGenres>(
+        `https://api.themoviedb.org/3/genre/movie/list`,
+        config,
+      );
 
     const { genres } = response.data;
 
@@ -47,14 +50,15 @@ export class MovieUtilsService {
 
   async getMovieInformationById(
     movieId: number,
-  ): Promise<IMovieInfo> {
+  ): Promise<MovieInfo> {
     const config = this.getConfig();
 
     try {
-      const response = await this.httpService.axiosRef.get(
-        `https://api.themoviedb.org/3/movie/${movieId}`,
-        config,
-      );
+      const response =
+        await this.httpService.axiosRef.get<TmdbMovieDetails>(
+          `https://api.themoviedb.org/3/movie/${movieId}`,
+          config,
+        );
 
       const movieData = response.data;
 
@@ -83,19 +87,20 @@ export class MovieUtilsService {
 
   async getMovieCastById(
     movieId: number,
-  ): Promise<ICastInfo> {
+  ): Promise<CastInfo> {
     const config = this.getConfig();
 
     try {
-      const response = await this.httpService.axiosRef.get(
-        `https://api.themoviedb.org/3/movie/${movieId}/credits`,
-        config,
-      );
+      const response =
+        await this.httpService.axiosRef.get<TmdbMovieCredits>(
+          `https://api.themoviedb.org/3/movie/${movieId}/credits`,
+          config,
+        );
 
       const cast = response.data.cast;
       const crew = response.data.crew;
 
-      const castInfo: ICastInfo = {
+      const castInfo: CastInfo = {
         actors: [],
         director: [],
       };
@@ -106,7 +111,7 @@ export class MovieUtilsService {
           character: cast[i].character,
           imagePath:
             'https://image.tmdb.org/t/p/w500' +
-            cast[i].profile_path,
+            cast[i]?.profile_path,
         });
       }
 
@@ -116,7 +121,7 @@ export class MovieUtilsService {
             name: crewMember.name,
             imagePath:
               'https://image.tmdb.org/t/p/w500' +
-              crewMember.profile_path,
+              crewMember?.profile_path,
           });
           break;
         }
@@ -131,18 +136,18 @@ export class MovieUtilsService {
     }
   }
 
-  async getTopFiveTrending(): Promise<ITrendingInfo[]> {
+  async getTopFiveTrending(): Promise<TrendingInfo[]> {
     const config = this.getConfig();
 
     try {
       const response =
-        await this.httpService.axiosRef.get<any>(
+        await this.httpService.axiosRef.get<TmdbTrending>(
           'https://api.themoviedb.org/3/trending/movie/day?language=en-US',
           config,
         );
 
       const results = response.data.results;
-      const trendingMovies: ITrendingInfo[] = [];
+      const trendingMovies: TrendingInfo[] = [];
 
       const genresObject = await this.getGenresObject();
 
@@ -171,12 +176,12 @@ export class MovieUtilsService {
     }
   }
 
-  async getLatestTrendingMovie(): Promise<ITrendingInfo> {
+  async getLatestTrendingMovie(): Promise<TrendingInfo> {
     const config = this.getConfig();
 
     try {
       const response =
-        await this.httpService.axiosRef.get<any>(
+        await this.httpService.axiosRef.get<TmdbTrending>(
           'https://api.themoviedb.org/3/trending/movie/day?language=en-US',
           config,
         );
@@ -185,7 +190,7 @@ export class MovieUtilsService {
 
       const genresObject = await this.getGenresObject();
 
-      const latest: ITrendingInfo = {
+      const latest: TrendingInfo = {
         id: results[0].id,
         adult: results[0].adult,
         imagePath:
@@ -227,14 +232,13 @@ export class MovieUtilsService {
       );
     else if (error.response.status === 404) {
       if (
-        (error.response.data as ITmdbError).status_code ===
-        6
+        (error.response.data as TmdbError).status_code === 6
       )
         throw new BadRequestException(
           ErrorMessages.InvalidMovieId,
         );
       else if (
-        (error.response.data as ITmdbError).status_code ===
+        (error.response.data as TmdbError).status_code ===
         34
       )
         throw new NotFoundException(

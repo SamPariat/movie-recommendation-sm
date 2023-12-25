@@ -6,7 +6,7 @@ import {
   Query,
 } from '@nestjs/common';
 
-import { IMovieInfo } from '../movie/types';
+import { MovieInfo } from '../movie/types';
 import { RecommendationService } from './recommendation.service';
 
 @Controller('model')
@@ -20,7 +20,7 @@ export class RecommendationController {
   async getRecommendation(
     @Query('movie') movie: string,
   ): Promise<{
-    recommendations: IMovieInfo[];
+    recommendations: MovieInfo[];
   }> {
     return this.recommendationService.getRecommendation(
       movie,

@@ -10,7 +10,7 @@ import * as argon from 'argon2';
 import { ErrorMessages } from '../constants';
 import { PrismaService } from '../prisma/prisma.service';
 import { LoginDto, SignupDto } from './dto';
-import { ITokens } from './types';
+import { Tokens } from './types';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +20,7 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async login(dto: LoginDto): Promise<ITokens> {
+  async login(dto: LoginDto): Promise<Tokens> {
     try {
       const existingMovieUser =
         await this.prismaService.movieUsers.findUnique({
@@ -60,7 +60,7 @@ export class AuthService {
     }
   }
 
-  async signup(dto: SignupDto): Promise<ITokens> {
+  async signup(dto: SignupDto): Promise<Tokens> {
     try {
       const hashedPassword = await argon.hash(dto.password);
 
@@ -203,7 +203,7 @@ export class AuthService {
   async signTokens(
     userId: string,
     email: string,
-  ): Promise<ITokens> {
+  ): Promise<Tokens> {
     const [access_token, refresh_token] = await Promise.all(
       [
         this.generateAccessToken(userId, email),

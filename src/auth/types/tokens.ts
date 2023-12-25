@@ -1,6 +1,6 @@
-interface ITokens {
+type Tokens = {
   access_token: string;
   refresh_token: string;
-}
+};
 
-export type { ITokens };
+export type { Tokens };
