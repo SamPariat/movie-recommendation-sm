@@ -1,5 +1,9 @@
 import { cssBundleHref } from '@remix-run/css-bundle';
-import type { LinksFunction } from '@remix-run/node';
+import {
+  json,
+  type LinksFunction,
+  type LoaderFunctionArgs,
+} from '@remix-run/node';
 import {
   Links,
   LiveReload,
@@ -7,7 +11,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from '@remix-run/react';
+import { useEffect } from 'react';
+import { getToast } from 'remix-toast';
+import { toast as sonnerToast } from 'sonner';
 
 import { TopNav } from './components/navigation';
 import { Toaster } from './components/ui/sonner';
@@ -20,7 +28,31 @@ export const links: LinksFunction = () => [
     : []),
 ];
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { toast, headers } = await getToast(request);
+  return json({ toast }, { headers });
+}
+
 export default function App() {
+  const { toast } = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    switch (toast?.type) {
+      case 'error':
+        sonnerToast.error(toast.message);
+        break;
+      case 'info':
+        sonnerToast.info(toast.message);
+        break;
+      case 'success':
+        sonnerToast.success(toast.message);
+        break;
+      case 'warning':
+        sonnerToast.warning(toast.message);
+        break;
+    }
+  }, [toast]);
+
   return (
     <html lang='en'>
       <head>

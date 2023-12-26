@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ActionFunctionArgs, json, redirect } from '@remix-run/node';
+import { ActionFunctionArgs, json } from '@remix-run/node';
 import { MetaFunction } from '@remix-run/react';
 import { getValidatedFormData } from 'remix-hook-form';
-import { toast } from 'sonner';
+import { jsonWithError, redirectWithSuccess } from 'remix-toast';
 
 import { login, signup } from '~/api';
 import { AuthForm, RegisterForm } from '~/components/forms';
@@ -63,17 +63,19 @@ export async function action({ request }: ActionFunctionArgs) {
     session.set('access_token', tokens.access_token);
     session.set('refresh_token', tokens.refresh_token);
 
-    toast.success(
-      `Successfully ${isLogin ? 'logged in' : 'registered'}.`
+    return redirectWithSuccess(
+      '/',
+      isLogin
+        ? 'Welcome back.'
+        : 'Successfully registered! Start using the application.',
+      {
+        headers: {
+          'Set-Cookie': await commitSession(session),
+        },
+      }
     );
-
-    return redirect('/', {
-      headers: {
-        'Set-Cookie': await commitSession(session),
-      },
-    });
   } catch (error) {
-    throw json({ error });
+    return jsonWithError(null, 'Error');
   }
 }
 

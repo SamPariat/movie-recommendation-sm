@@ -37,6 +37,7 @@
     "react-dom": "^18.2.0",
     "recharts": "^2.10.3",
     "remix-hook-form": "^3.2.3",
+    "remix-toast": "^1.1.0",
     "sonner": "^1.2.4",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",

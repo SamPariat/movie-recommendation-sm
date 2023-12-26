@@ -4,12 +4,16 @@ import {
   LoaderFunctionArgs,
   defer,
   json,
-  redirect,
 } from '@remix-run/node';
 import { Await, MetaFunction, useLoaderData } from '@remix-run/react';
 import { AxiosError } from 'axios';
 import { Suspense } from 'react';
 import { getValidatedFormData } from 'remix-hook-form';
+import {
+  jsonWithError,
+  jsonWithSuccess,
+  redirectWithToast,
+} from 'remix-toast';
 
 import {
   getReviews,
@@ -43,9 +47,9 @@ export async function action({
   const session = await getSession(request.headers.get('Cookie'));
 
   if (!session.has('access_token') || !session.has('refresh_token')) {
-    return redirect('/login', {
-      status: 401,
-      statusText: "Can't add review without an account.",
+    return redirectWithToast('/login', {
+      message: 'You must log in to add your review',
+      type: 'error',
     });
   }
 
@@ -68,15 +72,13 @@ export async function action({
   const review: string = data.review;
 
   try {
-    const savedReview = await saveReview(
+    await saveReview(
       params.movieId as string,
       review as string,
       session.get('access_token')!
     );
 
-    return json({
-      savedReview,
-    });
+    return jsonWithSuccess({ result: 'Success' }, 'Review saved.');
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response?.status === 401) {
@@ -87,21 +89,22 @@ export async function action({
         session.set('access_token', tokens.access_token);
         session.set('refresh_token', tokens.refresh_token);
 
-        const savedReview = await saveReview(
+        await saveReview(
           params.movieId as string,
           review as string,
           tokens.access_token
         );
 
-        return json({
-          savedReview,
-        });
+        return jsonWithSuccess(
+          { result: 'Success' },
+          'Review saved.'
+        );
       }
+
+      return jsonWithError(null, error.message);
     }
 
-    throw json({
-      error,
-    });
+    return jsonWithError(null, 'Something went wrong...');
   }
 }
 
