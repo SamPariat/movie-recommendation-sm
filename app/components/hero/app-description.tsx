@@ -1,20 +1,21 @@
 import { Variants, motion } from 'framer-motion';
-import { Button } from '../ui/button';
 import { Download } from 'lucide-react';
+
+import { Button } from '../ui/button';
 
 const appDescriptionVariants: Variants = {
   initial: {
     rotateY: 0,
     y: -45,
     transition: {
-      duration: 0.5,
+      duration: 0.1,
     },
   },
   hover: {
     rotateY: 45,
     y: 0,
     transition: {
-      duration: 0.5,
+      duration: 0.1,
     },
   },
 };

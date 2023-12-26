@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ActionFunctionArgs, json } from '@remix-run/node';
 import { MetaFunction } from '@remix-run/react';
+import { AxiosError } from 'axios';
 import { getValidatedFormData } from 'remix-hook-form';
 import { jsonWithError, redirectWithSuccess } from 'remix-toast';
 
@@ -53,6 +54,9 @@ export async function action({ request }: ActionFunctionArgs) {
       },
     });
   } catch (error) {
+    if (error instanceof AxiosError) {
+      return jsonWithError(null, error.response?.data.message);
+    }
     return jsonWithError(null, 'Error');
   }
 }

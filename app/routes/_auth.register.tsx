@@ -1,13 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ActionFunctionArgs, json } from '@remix-run/node';
 import { MetaFunction } from '@remix-run/react';
+import { AxiosError } from 'axios';
 import { getValidatedFormData } from 'remix-hook-form';
 import { jsonWithError, redirectWithSuccess } from 'remix-toast';
 
-import { login, signup } from '~/api';
+import { signup } from '~/api';
 import { RegisterForm } from '~/components/forms';
 import { commitSession, getSession } from '~/sessions';
-import { authFormSchema, registerFormSchema } from '~/types';
+import { registerFormSchema } from '~/types';
 
 export const meta: MetaFunction = () => {
   return [
@@ -62,6 +63,9 @@ export async function action({ request }: ActionFunctionArgs) {
       }
     );
   } catch (error) {
+    if (error instanceof AxiosError) {
+      return jsonWithError(null, error.response?.data.message);
+    }
     return jsonWithError(null, 'Error');
   }
 }
