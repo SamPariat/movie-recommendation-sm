@@ -36,7 +36,7 @@ export const AuthForm = () => {
   return (
     <AnimatePresence key='auth-form'>
       <Form
-        className='space-y-2'
+        className='space-y-2 mb-4'
         method='post'
         onSubmit={handleSubmit}
       >
@@ -81,7 +81,9 @@ export const AuthForm = () => {
           type='submit'
           disabled={navigation.state === 'submitting'}
         >
-          {navigation.state === 'idle' ? 'Login' : 'Logging in...'}
+          {navigation.state === 'submitting'
+            ? 'Logging in...'
+            : 'Log in'}
         </Button>
       </Form>
 

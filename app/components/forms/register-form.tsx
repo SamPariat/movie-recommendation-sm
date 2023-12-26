@@ -36,7 +36,7 @@ export const RegisterForm = () => {
   return (
     <AnimatePresence key='register-form'>
       <Form
-        className='space-y-2'
+        className='space-y-2 mb-4'
         method='post'
         onSubmit={handleSubmit}
       >
@@ -117,9 +117,9 @@ export const RegisterForm = () => {
           type='submit'
           disabled={navigation.state === 'submitting'}
         >
-          {navigation.state === 'idle'
-            ? 'Register'
-            : 'Registering...'}
+          {navigation.state === 'submitting'
+            ? 'Registering...'
+            : 'Register'}
         </Button>
       </Form>
 
