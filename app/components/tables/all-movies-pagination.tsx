@@ -1,11 +1,11 @@
 import { Table } from '@tanstack/react-table';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { IMovieIdAndTitle } from '~/types';
+import { MovieIdAndTitle } from '~/types';
 import { Button } from '../ui/button';
 
 type AllMoviesPaginationProps = {
-  table: Table<IMovieIdAndTitle>;
+  table: Table<MovieIdAndTitle>;
 };
 
 export function AllMoviesPagination({

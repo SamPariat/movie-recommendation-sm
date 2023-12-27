@@ -4,7 +4,7 @@ import {
   flexRender,
 } from '@tanstack/react-table';
 
-import { IMovieIdAndTitle } from '~/types';
+import { MovieIdAndTitle } from '~/types';
 import {
   Table,
   TableBody,
@@ -15,7 +15,7 @@ import {
 } from '../ui/table';
 
 type AllMoviesRenderedTableProps = {
-  table: TanstackTable<IMovieIdAndTitle>;
+  table: TanstackTable<MovieIdAndTitle>;
 };
 
 export function AllMoviesRenderedTable({

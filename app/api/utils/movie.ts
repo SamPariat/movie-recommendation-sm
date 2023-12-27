@@ -1,44 +1,44 @@
 import {
-  IAllMovies,
-  ICastInfo,
-  IMovieIdAndTitle,
-  IMovieInfo,
-  ITrendingInfo,
+  AllMovies,
+  CastInfo,
+  MovieIdAndTitle,
+  MovieInfo,
+  TrendingInfo,
 } from '~/types';
 import request from '..';
 
-const getLatestTrending = async (): Promise<ITrendingInfo> => {
+const getLatestTrending = async (): Promise<TrendingInfo> => {
   const latestTrending = await request<{
-    latestTrending: ITrendingInfo;
+    latestTrending: TrendingInfo;
   }>('get', '/movie/latest-trending');
 
   return latestTrending.data.latestTrending;
 };
 
-const getTop5Trending = async (): Promise<ITrendingInfo[]> => {
+const getTop5Trending = async (): Promise<TrendingInfo[]> => {
   const top5TrendingData = await request<{
-    top5Trending: ITrendingInfo[];
+    top5Trending: TrendingInfo[];
   }>('get', '/movie/top-5-trending');
 
   return top5TrendingData.data.top5Trending;
 };
 
-const getMovieCast = async (movieId: string): Promise<ICastInfo> => {
-  const movieCast = await request<ICastInfo>('get', '/movie/cast', {
+const getMovieCast = async (movieId: string): Promise<CastInfo> => {
+  const movieCast = await request<CastInfo>('get', '/movie/cast', {
     id: movieId,
   });
 
   return movieCast.data;
 };
 
-const getAll = async (): Promise<IMovieIdAndTitle[]> => {
-  const allMovies = await request<IAllMovies>('get', '/movie/all');
+const getAll = async (): Promise<MovieIdAndTitle[]> => {
+  const allMovies = await request<AllMovies>('get', '/movie/all');
 
   return allMovies.data.dicc_arr;
 };
 
-const getInfo = async (movieId: string): Promise<IMovieInfo> => {
-  const movieInfo = await request<IMovieInfo>('get', '/movie/info', {
+const getInfo = async (movieId: string): Promise<MovieInfo> => {
+  const movieInfo = await request<MovieInfo>('get', '/movie/info', {
     id: movieId,
   });
 
@@ -47,8 +47,8 @@ const getInfo = async (movieId: string): Promise<IMovieInfo> => {
 
 const getRecommendations = async (
   movieTitle: string
-): Promise<IMovieInfo[]> => {
-  const response = await request<{ recommendations: IMovieInfo[] }>(
+): Promise<MovieInfo[]> => {
+  const response = await request<{ recommendations: MovieInfo[] }>(
     'get',
     '/model/recommendation',
     {

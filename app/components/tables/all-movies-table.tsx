@@ -11,16 +11,16 @@ import {
 import { ArrowDownWideNarrow, ArrowUp } from 'lucide-react';
 import { useState } from 'react';
 
-import { IMovieIdAndTitle } from '~/types';
+import { MovieIdAndTitle } from '~/types';
 import { AllMoviesPagination, AllMoviesRenderedTable } from '.';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 
 type AllMovieTableProps = {
-  data: IMovieIdAndTitle[];
+  data: MovieIdAndTitle[];
 };
 
-const columns: ColumnDef<IMovieIdAndTitle>[] = [
+const columns: ColumnDef<MovieIdAndTitle>[] = [
   {
     accessorKey: 'id',
     header: 'ID',

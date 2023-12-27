@@ -2,7 +2,7 @@ export function TrendingDescription() {
   return (
     <div className='grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 space-x-4'>
       <div className='col-span-1 md:col-span-2 xl:col-span-3'>
-        <h1 className='font-bold text-4xl sm:text-6xl lg:text-7xl xl:text-8xl mb-8'>
+        <h1 className='text-5xl md:text-6xl lg:text-7xl font-bold mb-4'>
           Trending
         </h1>
         <p className='font-medium text-xl sm:text-3xl lg:text-4xl mb-4'>

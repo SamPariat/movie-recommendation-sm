@@ -1,11 +1,11 @@
 import { Table } from '@tanstack/react-table';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { IMovieReview } from '~/types';
+import { Review } from '~/types';
 import { Button } from '../ui/button';
 
 type UserReviewsPaginationProps = {
-  table: Table<IMovieReview>;
+  table: Table<Review>;
 };
 
 export function UserReviewsPagination({

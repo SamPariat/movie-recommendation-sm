@@ -1,11 +1,11 @@
 import { useNavigate } from '@remix-run/react';
 
-import { IMovieInfo } from '~/types';
+import { MovieInfo } from '~/types';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 
 type MovieInfoCardProps = {
-  info: IMovieInfo;
+  info: MovieInfo;
 };
 
 export function MovieInfoCard({ info }: MovieInfoCardProps) {

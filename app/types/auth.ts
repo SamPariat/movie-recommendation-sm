@@ -1,13 +1,13 @@
-interface IAuth {
+type Auth = {
   _id: string;
   name: string;
   email: string;
   __v: number;
-}
+};
 
-interface ITokens {
+type Tokens = {
   access_token: string;
   refresh_token: string;
-}
+};
 
-export type { IAuth, ITokens };
+export type { Auth, Tokens };

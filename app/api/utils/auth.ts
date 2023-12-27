@@ -1,11 +1,11 @@
-import { IAuth, ITokens } from '~/types';
+import { Auth, Tokens } from '~/types';
 import request from '..';
 
 const login = async (
   email: FormDataEntryValue,
   password: FormDataEntryValue
-): Promise<ITokens> => {
-  const response = await request<ITokens>(
+): Promise<Tokens> => {
+  const response = await request<Tokens>(
     'post',
     '/auth/local/login',
     undefined,
@@ -22,8 +22,8 @@ const signup = async (
   email: FormDataEntryValue,
   password: FormDataEntryValue,
   name: FormDataEntryValue
-): Promise<ITokens> => {
-  const response = await request<ITokens>(
+): Promise<Tokens> => {
+  const response = await request<Tokens>(
     'post',
     '/auth/local/signup',
     undefined,
@@ -37,8 +37,8 @@ const signup = async (
   return response.data;
 };
 
-const profile = async (): Promise<IAuth> => {
-  const response = await request<IAuth>('get', '/profile');
+const profile = async (): Promise<Auth> => {
+  const response = await request<Auth>('get', '/profile');
 
   return response.data;
 };
@@ -49,8 +49,8 @@ const logout = async (): Promise<void> => {
 
 const refreshToken = async (
   refresh_token: string
-): Promise<ITokens> => {
-  const response = await request<ITokens>(
+): Promise<Tokens> => {
+  const response = await request<Tokens>(
     'post',
     '/auth/refresh',
     undefined,
@@ -63,4 +63,4 @@ const refreshToken = async (
   return response.data;
 };
 
-export { login, logout, profile, signup, refreshToken };
+export { login, logout, profile, refreshToken, signup };

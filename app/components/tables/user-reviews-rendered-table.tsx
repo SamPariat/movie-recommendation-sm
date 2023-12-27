@@ -3,7 +3,7 @@ import {
   flexRender,
 } from '@tanstack/react-table';
 
-import { IMovieReview } from '~/types';
+import { Review } from '~/types';
 import {
   Table,
   TableBody,
@@ -14,7 +14,7 @@ import {
 } from '../ui/table';
 
 type UserReviewsRenderedTableProps = {
-  table: TanstackTable<IMovieReview>;
+  table: TanstackTable<Review>;
 };
 
 export function UserReviewsRenderedTable({

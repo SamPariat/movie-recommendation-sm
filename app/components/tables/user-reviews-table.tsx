@@ -11,19 +11,23 @@ import {
 import { ArrowDownWideNarrow, ArrowUp } from 'lucide-react';
 import { useState } from 'react';
 
-import { IMovieReview } from '~/types';
+import { Review } from '~/types';
 import { UserReviewsPagination, UserReviewsRenderedTable } from '.';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 
 type UserReviewsTableProps = {
-  data: IMovieReview[];
+  data: Review[];
 };
 
-const columns: ColumnDef<IMovieReview>[] = [
+const columns: ColumnDef<Review>[] = [
   {
     accessorKey: 'sentiment',
     header: 'Sentiment',
+  },
+  {
+    accessorKey: 'movieUser.name',
+    header: 'Name',
   },
   {
     accessorKey: 'review',
