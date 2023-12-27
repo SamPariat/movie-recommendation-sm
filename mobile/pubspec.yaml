@@ -1,10 +1,10 @@
 name: mobile
 description: A movie recommendation system
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.1.5 <4.0.0'
+  sdk: ">=3.1.5 <4.0.0"
 
 dependencies:
   flutter:
@@ -25,6 +25,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/logo-no-background.png
-    - assets/images/logo-black.png
+    - assets/images/cinesuggest-3d-image-red.png
+    - assets/images/cosine-similarity-3d.png
+    - assets/images/login-3d.png
+    - assets/images/naive-bayes-3d.png
+    - assets/images/trending-3d.png
     - .env
