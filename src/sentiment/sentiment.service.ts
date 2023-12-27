@@ -11,6 +11,7 @@ import { AxiosError } from 'axios';
 
 import { ErrorMessages, Sentiment } from '../constants';
 import { PrismaService } from '../prisma/prisma.service';
+import { MovieReviewWithUser } from './types';
 
 @Injectable()
 export class SentimentService {
@@ -22,11 +23,18 @@ export class SentimentService {
 
   async getAllReviews(
     movieId: number,
-  ): Promise<{ reviews: MovieReviews[] }> {
+  ): Promise<{ reviews: MovieReviewWithUser[] }> {
     const reviews =
       await this.prismaService.movieReviews.findMany({
         where: {
           movieId,
+        },
+        include: {
+          movieUser: {
+            select: {
+              name: true,
+            },
+          },
         },
       });
 
@@ -37,13 +45,20 @@ export class SentimentService {
     movieId: number,
     page: number,
     limit: number,
-  ): Promise<{ reviews: MovieReviews[] }> {
+  ): Promise<{ reviews: MovieReviewWithUser[] }> {
     const reviews =
       await this.prismaService.movieReviews.findMany({
         take: limit,
         skip: (page - 1) * limit,
         where: {
           movieId,
+        },
+        include: {
+          movieUser: {
+            select: {
+              name: true,
+            },
+          },
         },
       });
 

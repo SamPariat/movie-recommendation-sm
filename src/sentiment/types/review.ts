@@ -1,9 +1,9 @@
-interface IMovieReview {
-  id: string;
-  review: string;
-  sentiment: string;
-  movie: string;
-  movieuserId: string;
-}
+import { MovieReviews } from '@prisma/client';
 
-export { IMovieReview };
+type MovieReviewWithUser = MovieReviews & {
+  movieUser: {
+    name: string;
+  };
+};
+
+export type { MovieReviewWithUser };
