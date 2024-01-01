@@ -2,6 +2,7 @@ import os
 import pickle
 from flask import Blueprint, jsonify, request
 import pandas as pd
+import json
 
 recommendation_blueprint = Blueprint('recommendation_blueprint', __name__)
 
@@ -62,6 +63,27 @@ def all_movies():
         for i in not_np_array_movies:
             dicc = {'id': i[0], 'title': i[1]}
             dicc_arr.append(dicc)
+
+        return jsonify({'dicc_arr': dicc_arr}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@recommendation_blueprint.route('/all-movies-new', methods=['GET'])
+def all_movies_new():
+    try:
+        movies_data = pd.read_csv('5000_movies.csv')
+
+        selected_columns = ['id', 'title', 'genres']
+
+        # Ensure genres is in JSON format & then extract the name property from each genre
+        movies_data['genres'] = movies_data['genres'].apply(json.loads)
+        movies_data['genres'] = movies_data['genres'].apply(lambda x: [genre['name'] for genre in x])
+
+        movies_subset = movies_data[selected_columns]
+        sorted_movies = movies_subset.sort_values(by='title')
+
+        dicc_arr = sorted_movies.to_dict(orient='records')
 
         return jsonify({'dicc_arr': dicc_arr}), 200
     except Exception as e:
