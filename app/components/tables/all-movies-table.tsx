@@ -15,6 +15,7 @@ import { MovieIdAndTitle } from '~/types';
 import { AllMoviesPagination, AllMoviesRenderedTable } from '.';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
+import { Badge } from '../ui/badge';
 
 type AllMovieTableProps = {
   data: MovieIdAndTitle[];
@@ -43,6 +44,29 @@ const columns: ColumnDef<MovieIdAndTitle>[] = [
             <ArrowDownWideNarrow className='ml-2' size={12} />
           )}
         </Button>
+      );
+    },
+  },
+  {
+    accessorKey: 'genres',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' size='sm'>
+          Genres
+        </Button>
+      );
+    },
+    cell: ({ getValue }) => {
+      const genres = getValue<string[]>();
+
+      return (
+        <span className='space-x-2'>
+          {genres.map((genre) => (
+            <Badge variant='outline' key={genre}>
+              {genre}
+            </Badge>
+          ))}
+        </span>
       );
     },
   },

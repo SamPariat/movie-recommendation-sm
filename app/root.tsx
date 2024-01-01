@@ -19,6 +19,8 @@ import { toast as sonnerToast } from 'sonner';
 
 import { TopNav } from './components/navigation';
 import { Toaster } from './components/ui/sonner';
+import { AuthContext } from './context';
+import { getSession } from './sessions';
 import tailwind from './tailwind.css';
 
 export const links: LinksFunction = () => [
@@ -30,11 +32,21 @@ export const links: LinksFunction = () => [
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { toast, headers } = await getToast(request);
-  return json({ toast }, { headers });
+
+  const session = await getSession(request.headers.get('Cookie'));
+
+  return json(
+    {
+      toast,
+      isAuth:
+        session.has('access_token') && session.has('refresh_token'),
+    },
+    { headers }
+  );
 }
 
 export default function App() {
-  const { toast } = useLoaderData<typeof loader>();
+  const { toast, isAuth } = useLoaderData<typeof loader>();
 
   useEffect(() => {
     switch (toast?.type) {
@@ -65,7 +77,9 @@ export default function App() {
         <Links />
       </head>
       <body className='dark'>
-        <TopNav />
+        <AuthContext.Provider value={{ isAuth }}>
+          <TopNav />
+        </AuthContext.Provider>
         <main className='flex flex-col px-6 md:px-12 mt-24 space-y-4'>
           <Outlet />
         </main>

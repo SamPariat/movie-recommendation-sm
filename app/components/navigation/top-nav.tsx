@@ -1,5 +1,6 @@
 import { useNavigate } from '@remix-run/react';
 import { Clapperboard } from 'lucide-react';
+import { useContext } from 'react';
 
 import {
   NavigationMenu,
@@ -10,6 +11,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '~/components/ui/navigation-menu';
+import { AuthContext } from '~/context';
 import { ListItem } from './list-item';
 
 const abouts: {
@@ -37,7 +39,8 @@ const abouts: {
   {
     title: 'App',
     to: '#',
-    description: 'Flutter leveraged for cross-platform development. (In beta)',
+    description:
+      'Flutter leveraged for cross-platform development. (In beta)',
   },
   {
     title: 'MongoDB',
@@ -54,6 +57,7 @@ const abouts: {
 
 export function TopNav() {
   const navigate = useNavigate();
+  const { isAuth } = useContext(AuthContext);
 
   return (
     <NavigationMenu className='flex m-auto'>
@@ -120,12 +124,20 @@ export function TopNav() {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuLink
-            className={`${navigationMenuTriggerStyle()} hover:cursor-pointer`}
-            onClick={() => navigate('/login')}
-          >
-            Login
-          </NavigationMenuLink>
+          {!isAuth ? (
+            <NavigationMenuLink
+              className={`${navigationMenuTriggerStyle()} hover:cursor-pointer`}
+              onClick={() => navigate('/login')}
+            >
+              Login
+            </NavigationMenuLink>
+          ) : (
+            <NavigationMenuLink
+              className={`${navigationMenuTriggerStyle()} hover:cursor-pointer`}
+            >
+              Logout
+            </NavigationMenuLink>
+          )}
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>

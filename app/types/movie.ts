@@ -36,6 +36,7 @@ type MovieData = MovieInfo & {
 type MovieIdAndTitle = {
   id: number;
   title: string;
+  genres: string[];
 };
 
 type AllMovies = {
