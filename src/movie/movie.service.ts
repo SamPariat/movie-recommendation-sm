@@ -1,13 +1,10 @@
 import { HttpService } from '@nestjs/axios';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosError } from 'axios';
-import { Cache } from 'cache-manager';
 
 import { ErrorMessages } from '../constants';
 import { MovieUtilsService } from './movie-utils/movie-utils.service';
@@ -22,7 +19,6 @@ import {
 export class MovieService {
   constructor(
     private movieUtils: MovieUtilsService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private httpService: HttpService,
     private configService: ConfigService,
   ) {}
@@ -66,26 +62,16 @@ export class MovieService {
       'MODEL_BASE_URL',
     );
 
-    const cachedMovies: AllMovies =
-      await this.cacheManager.get('movies:dicc_arr');
-
     try {
-      if (cachedMovies) return cachedMovies;
-
       const response =
         await this.httpService.axiosRef.get<AllMovies>(
-          `${modelBaseUrl}/all-movies`,
+          `${modelBaseUrl}/all-movies-new`,
         );
 
       const allMovies = response.data;
 
       if (!allMovies)
         throw new NotFoundException(ErrorMessages.NoMovies);
-
-      await this.cacheManager.set(
-        'movies:dicc_arr',
-        allMovies,
-      );
 
       return allMovies;
     } catch (error) {

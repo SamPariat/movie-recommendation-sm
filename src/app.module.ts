@@ -1,6 +1,10 @@
-import { CacheModule } from '@nestjs/cache-manager';
+import {
+  CacheInterceptor,
+  CacheModule,
+} from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -18,7 +22,7 @@ import { UserModule } from './user/user.module';
     }),
     CacheModule.register({
       isGlobal: true,
-      ttl: 60000,
+      ttl: 3600,
     }),
     AuthModule,
     RecommendationModule,
@@ -28,6 +32,12 @@ import { UserModule } from './user/user.module';
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
+  ],
 })
 export class AppModule {}

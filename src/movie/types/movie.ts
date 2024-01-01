@@ -37,6 +37,7 @@ type AllMovies = {
   dicc_arr: {
     id: number;
     title: string;
+    genres: string[];
   }[];
 };
 

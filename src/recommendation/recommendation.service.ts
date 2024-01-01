@@ -1,14 +1,11 @@
 import { HttpService } from '@nestjs/axios';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
-  Inject,
   Injectable,
   NotFoundException,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosError } from 'axios';
-import { Cache } from 'cache-manager';
 
 import { ErrorMessages } from '../constants';
 import { MovieUtilsService } from '../movie/movie-utils/movie-utils.service';
@@ -17,7 +14,6 @@ import { MovieInfo } from '../movie/types';
 @Injectable()
 export class RecommendationService {
   constructor(
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private httpService: HttpService,
     private configService: ConfigService,
     private movieUtilsService: MovieUtilsService,
@@ -30,15 +26,6 @@ export class RecommendationService {
       const modelBaseUrl = this.configService.get<string>(
         'MODEL_BASE_URL',
       );
-
-      const cachedRecommendations: {
-        recommendations: MovieInfo[];
-      } = await this.cacheManager.get(
-        `recommendations:${movie}`,
-      );
-
-      if (cachedRecommendations)
-        return cachedRecommendations;
 
       const response = await this.httpService.axiosRef.get<
         {
@@ -62,11 +49,6 @@ export class RecommendationService {
       const movieData = (
         await Promise.all(movieInfoPromise)
       ).filter((pred) => pred !== null);
-
-      await this.cacheManager.set(
-        `recommendations:${movie}`,
-        { recommendations: movieData },
-      );
 
       return { recommendations: movieData };
     } catch (error) {
