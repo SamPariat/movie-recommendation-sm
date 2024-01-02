@@ -51,7 +51,7 @@ export function TopTrendingCard({
           <CardTitle className='text-2xl md:text-5xl'>
             {title}
           </CardTitle>
-          <span className='flex space-x-2 justify-around'>
+          <span className='flex space-x-2 justify-between'>
             {genres.map((genre) => (
               <Badge
                 key={`${title}-${genre}`}
