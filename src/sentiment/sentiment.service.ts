@@ -180,26 +180,20 @@ export class SentimentService {
     }
   }
 
-  getModelBaseUrl(): string {
-    return this.configService.get<string>('MODEL_BASE_URL');
-  }
-
-  async createNewReview(
+  async editReview(
     movieId: number,
-    review: string,
-    sentiment: Sentiment,
-    movieUserId: string,
-  ): Promise<MovieReviews> {
-    const newReview =
-      await this.prismaService.movieReviews.create({
-        data: {
-          movieId,
-          review,
-          sentiment,
-          movieUserId,
-        },
-      });
+    reviewId: string,
+    updatedReview: string,
+    userId: string,
+  ) {}
 
-    return newReview;
+  async deleteReview(
+    movieId: number,
+    reviewId: string,
+    userId: string,
+  ) {}
+
+  private getModelBaseUrl(): string {
+    return this.configService.get<string>('MODEL_BASE_URL');
   }
 }

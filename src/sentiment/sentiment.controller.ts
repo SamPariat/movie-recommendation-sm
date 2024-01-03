@@ -1,11 +1,13 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -68,6 +70,37 @@ export class SentimentController {
     return this.sentimentService.saveReview(
       id,
       review,
+      userId,
+    );
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Patch('edit-review/:id')
+  @HttpCode(HttpStatus.OK)
+  async editReview(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('reviewId') reviewId: string,
+    @Body('review') updatedReview: string,
+    @GetUserId() userId: string,
+  ) {
+    return this.sentimentService.editReview(
+      id,
+      reviewId,
+      updatedReview,
+      userId,
+    );
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Delete('delete-review/:id')
+  async deleteReview(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('reviewId') reviewId: string,
+    @GetUserId() userId: string,
+  ) {
+    return this.sentimentService.deleteReview(
+      id,
+      reviewId,
       userId,
     );
   }
