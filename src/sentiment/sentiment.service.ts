@@ -1,24 +1,25 @@
-import { HttpService } from '@nestjs/axios';
 import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { MovieReviews } from '@prisma/client';
+import {
+  MovieReviews,
+  MovieSentiment,
+} from '@prisma/client';
 import { AxiosError } from 'axios';
 
-import { ErrorMessages, Sentiment } from '../constants';
+import { ErrorMessages } from '../constants';
 import { PrismaService } from '../prisma/prisma.service';
-import { MovieReviewWithUser } from './types';
+import { SentimentUtilsService } from './sentiment-utils/sentiment-utils.service';
+import { MovieReviewWithUser, Sentiment } from './types';
 
 @Injectable()
 export class SentimentService {
   constructor(
-    private configService: ConfigService,
     private prismaService: PrismaService,
-    private httpService: HttpService,
+    private sentimentUtilsService: SentimentUtilsService,
   ) {}
 
   async getAllReviews(
@@ -70,14 +71,11 @@ export class SentimentService {
     review: string,
     movieUserId: string,
   ): Promise<MovieReviews> {
-    const modelBaseUrl = this.getModelBaseUrl();
-
     try {
-      const response = await this.httpService.axiosRef.get<{
-        sentiment: 'Positive' | 'Negative';
-      }>(`${modelBaseUrl}/sentiment?review=${review}`);
-
-      const { sentiment } = response.data;
+      const sentiment =
+        await this.sentimentUtilsService.getSentimentOfReview(
+          review,
+        );
 
       const [newReview, _sentimentValue] =
         await this.prismaService.$transaction([
@@ -89,6 +87,7 @@ export class SentimentService {
               movieUserId,
             },
           }),
+          // Create a new review if it doesn't exist otherwise update
           this.prismaService.movieSentiment.upsert({
             create: {
               movieId,
@@ -140,7 +139,7 @@ export class SentimentService {
       const positiveReviews =
         await this.prismaService.movieReviews.count({
           where: {
-            sentiment: Sentiment.Positive,
+            sentiment: 'Positive',
             movieId,
           },
         });
@@ -148,32 +147,24 @@ export class SentimentService {
       const negativeReviews =
         await this.prismaService.movieReviews.count({
           where: {
-            sentiment: Sentiment.Negative,
+            sentiment: 'Negative',
             movieId,
           },
         });
 
       return [
         {
-          name: Sentiment.Positive,
+          name: 'Positive',
           value: positiveReviews,
         },
         {
-          name: Sentiment.Negative,
+          name: 'Negative',
           value: negativeReviews,
         },
       ];
     } catch (error) {
       if (error instanceof AxiosError) {
-        if (error.response.status === 500) {
-          throw new ServiceUnavailableException(
-            ErrorMessages.ErrorFetchingSentiment,
-          );
-        } else {
-          throw new ServiceUnavailableException(
-            ErrorMessages.ModelServiceUnavailable,
-          );
-        }
+        this.handleModelError(error);
       }
 
       throw error;
@@ -185,7 +176,73 @@ export class SentimentService {
     reviewId: string,
     updatedReview: string,
     userId: string,
-  ) {}
+  ): Promise<MovieSentiment> {
+    try {
+      const oldSentiment =
+        await this.sentimentUtilsService.getSentimentOfExistingReview(
+          movieId,
+          reviewId,
+          userId,
+        );
+
+      const newSentiment =
+        await this.sentimentUtilsService.getSentimentOfReview(
+          updatedReview,
+        );
+
+      const negativeToPositive =
+        oldSentiment === 'Negative' &&
+        newSentiment === 'Positive';
+      const positiveToNegative =
+        oldSentiment === 'Positive' &&
+        newSentiment === 'Negative';
+
+      const [_, review] =
+        await this.prismaService.$transaction([
+          // Update the review and sentiment
+          this.prismaService.movieReviews.update({
+            where: {
+              movieUserId: userId,
+              id: reviewId,
+            },
+            data: {
+              review: updatedReview,
+              sentiment: newSentiment,
+            },
+          }),
+          // Update the movie's overall sentiment by first decrementing the old sentiment
+          // and then increment the new sentiment
+          this.prismaService.movieSentiment.update({
+            where: {
+              movieId,
+            },
+            data: {
+              negative: {
+                increment: negativeToPositive
+                  ? -1
+                  : positiveToNegative
+                    ? 1
+                    : 0,
+              },
+              positive: {
+                increment: positiveToNegative
+                  ? -1
+                  : negativeToPositive
+                    ? 1
+                    : 0,
+              },
+            },
+          }),
+        ]);
+
+      return review;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        this.handleModelError(error);
+      }
+      throw error;
+    }
+  }
 
   async deleteReview(
     movieId: number,
@@ -193,7 +250,15 @@ export class SentimentService {
     userId: string,
   ) {}
 
-  private getModelBaseUrl(): string {
-    return this.configService.get<string>('MODEL_BASE_URL');
+  private handleModelError(error: AxiosError) {
+    if (error.response.status === 500) {
+      throw new ServiceUnavailableException(
+        ErrorMessages.ErrorFetchingSentiment,
+      );
+    } else {
+      throw new ServiceUnavailableException(
+        ErrorMessages.ModelServiceUnavailable,
+      );
+    }
   }
 }

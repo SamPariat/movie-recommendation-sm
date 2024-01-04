@@ -18,6 +18,7 @@ enum ErrorMessages {
   ErrorFetchingCastInformation = 'Error fetching cast information',
   ErrorFetchingTrendingInformation = 'Error fetching trending information',
   EmailAlreadyInUse = 'Email already in use',
+  ReviewDoesNotExist = 'Review does not exist',
 }
 
 export { ErrorMessages };
