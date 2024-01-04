@@ -43,8 +43,16 @@ const profile = async (): Promise<Auth> => {
   return response.data;
 };
 
-const logout = async (): Promise<void> => {
-  await request<void>('post', '/auth/local/logout');
+const logout = async (access_token: string): Promise<void> => {
+  await request<void>(
+    'post',
+    '/auth/local/logout',
+    undefined,
+    undefined,
+    {
+      Authorization: `Bearer ${access_token}`,
+    }
+  );
 };
 
 const refreshToken = async (

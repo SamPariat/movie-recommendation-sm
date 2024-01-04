@@ -1,6 +1,8 @@
 import { cssBundleHref } from '@remix-run/css-bundle';
 import {
+  ActionFunctionArgs,
   json,
+  redirect,
   type LinksFunction,
   type LoaderFunctionArgs,
 } from '@remix-run/node';
@@ -14,14 +16,20 @@ import {
   useLoaderData,
 } from '@remix-run/react';
 import { useEffect } from 'react';
-import { getToast } from 'remix-toast';
+import {
+  getToast,
+  jsonWithError,
+  redirectWithSuccess,
+} from 'remix-toast';
 import { toast as sonnerToast } from 'sonner';
 
 import { TopNav } from './components/navigation';
 import { Toaster } from './components/ui/sonner';
 import { AuthContext } from './context';
-import { getSession } from './sessions';
+import { commitSession, getSession } from './sessions';
 import tailwind from './tailwind.css';
+import { logout } from './api';
+import { AxiosError } from 'axios';
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: tailwind },
@@ -43,6 +51,32 @@ export async function loader({ request }: LoaderFunctionArgs) {
     },
     { headers }
   );
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const session = await getSession(request.headers.get('Cookie'));
+
+  try {
+    await logout(session.get('access_token')!);
+
+    session.unset('access_token');
+    session.unset('refresh_token');
+
+    return redirectWithSuccess(
+      '/login',
+      'Successfully logged out. Login to comment again.',
+      {
+        headers: {
+          'Set-Cookie': await commitSession(session),
+        },
+      }
+    );
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw jsonWithError(null, error.response?.data.message);
+    }
+    throw jsonWithError(null, 'Some error occurred.');
+  }
 }
 
 export default function App() {

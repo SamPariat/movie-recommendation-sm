@@ -1,4 +1,4 @@
-import { useNavigate } from '@remix-run/react';
+import { Form, useNavigate } from '@remix-run/react';
 import { Clapperboard } from 'lucide-react';
 import { useContext } from 'react';
 
@@ -13,6 +13,7 @@ import {
 } from '~/components/ui/navigation-menu';
 import { AuthContext } from '~/context';
 import { ListItem } from './list-item';
+import { Button } from '../ui/button';
 
 const abouts: {
   title: string;
@@ -135,7 +136,9 @@ export function TopNav() {
             <NavigationMenuLink
               className={`${navigationMenuTriggerStyle()} hover:cursor-pointer`}
             >
-              Logout
+              <Form method='post'>
+                <button>Logout</button>
+              </Form>
             </NavigationMenuLink>
           )}
         </NavigationMenuItem>

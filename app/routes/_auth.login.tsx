@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ActionFunctionArgs, json } from '@remix-run/node';
+import { ActionFunctionArgs, json, redirect } from '@remix-run/node';
 import { MetaFunction } from '@remix-run/react';
 import { AxiosError } from 'axios';
 import { getValidatedFormData } from 'remix-hook-form';
@@ -22,6 +22,10 @@ export const meta: MetaFunction = () => {
 
 export async function action({ request }: ActionFunctionArgs) {
   const session = await getSession(request.headers.get('Cookie'));
+
+  if (session.has('access_token') && session.has('refresh_token')) {
+    return redirect('/');
+  }
 
   const {
     errors,
