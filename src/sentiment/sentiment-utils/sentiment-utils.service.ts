@@ -17,7 +17,9 @@ export class SentimentUtilsService {
     private configService: ConfigService,
   ) {}
 
-  async getSentimentOfReview(review: string) {
+  async getSentimentOfReview(
+    review: string,
+  ): Promise<Sentiment> {
     const modelBaseUrl = this.getModelBaseUrl();
 
     const response = await this.httpService.axiosRef.get<{
@@ -48,6 +50,105 @@ export class SentimentUtilsService {
     }
 
     return existingReview.sentiment as Sentiment;
+  }
+
+  async editReview(
+    movieId: number,
+    reviewId: string,
+    updatedReview: string,
+    userId: string,
+  ): Promise<void> {
+    const oldSentiment =
+      await this.getSentimentOfExistingReview(
+        movieId,
+        reviewId,
+        userId,
+      );
+
+    const newSentiment =
+      await this.getSentimentOfReview(updatedReview);
+
+    const negativeToPositive =
+      oldSentiment === 'Negative' &&
+      newSentiment === 'Positive';
+    const positiveToNegative =
+      oldSentiment === 'Positive' &&
+      newSentiment === 'Negative';
+
+    const [_, _review] =
+      await this.prismaService.$transaction([
+        // Update the review and sentiment
+        this.prismaService.movieReviews.update({
+          where: {
+            movieUserId: userId,
+            id: reviewId,
+          },
+          data: {
+            review: updatedReview,
+            sentiment: newSentiment,
+          },
+        }),
+        // Update the movie's overall sentiment by first decrementing the old sentiment
+        // and then increment the new sentiment
+        this.prismaService.movieSentiment.update({
+          where: {
+            movieId,
+          },
+          data: {
+            negative: {
+              increment: negativeToPositive
+                ? -1
+                : positiveToNegative
+                  ? 1
+                  : 0,
+            },
+            positive: {
+              increment: positiveToNegative
+                ? -1
+                : negativeToPositive
+                  ? 1
+                  : 0,
+            },
+          },
+        }),
+      ]);
+  }
+
+  async deleteReview(
+    movieId: number,
+    reviewId: string,
+    userId: string,
+  ): Promise<void> {
+    const sentiment =
+      await this.getSentimentOfExistingReview(
+        movieId,
+        reviewId,
+        userId,
+      );
+
+    await this.prismaService.$transaction([
+      // Delete the review
+      this.prismaService.movieReviews.delete({
+        where: {
+          id: reviewId,
+          movieId,
+        },
+      }),
+      // Also reduce the sentiment count from the database
+      this.prismaService.movieSentiment.update({
+        where: {
+          movieId,
+        },
+        data: {
+          negative: {
+            decrement: sentiment === 'Negative' ? 1 : 0,
+          },
+          positive: {
+            decrement: sentiment === 'Positive' ? 1 : 0,
+          },
+        },
+      }),
+    ]);
   }
 
   getModelBaseUrl(): string {

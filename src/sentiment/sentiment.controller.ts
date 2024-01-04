@@ -82,7 +82,7 @@ export class SentimentController {
     @Query('reviewId') reviewId: string,
     @Body('review') updatedReview: string,
     @GetUserId() userId: string,
-  ) {
+  ): Promise<void> {
     return this.sentimentService.editReview(
       id,
       reviewId,
@@ -97,7 +97,7 @@ export class SentimentController {
     @Param('id', ParseIntPipe) id: number,
     @Query('reviewId') reviewId: string,
     @GetUserId() userId: string,
-  ) {
+  ): Promise<void> {
     return this.sentimentService.deleteReview(
       id,
       reviewId,

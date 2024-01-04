@@ -13,7 +13,7 @@ import { AxiosError } from 'axios';
 import { ErrorMessages } from '../constants';
 import { PrismaService } from '../prisma/prisma.service';
 import { SentimentUtilsService } from './sentiment-utils/sentiment-utils.service';
-import { MovieReviewWithUser, Sentiment } from './types';
+import { MovieReviewWithUser } from './types';
 
 @Injectable()
 export class SentimentService {
@@ -176,66 +176,14 @@ export class SentimentService {
     reviewId: string,
     updatedReview: string,
     userId: string,
-  ): Promise<MovieSentiment> {
+  ): Promise<void> {
     try {
-      const oldSentiment =
-        await this.sentimentUtilsService.getSentimentOfExistingReview(
-          movieId,
-          reviewId,
-          userId,
-        );
-
-      const newSentiment =
-        await this.sentimentUtilsService.getSentimentOfReview(
-          updatedReview,
-        );
-
-      const negativeToPositive =
-        oldSentiment === 'Negative' &&
-        newSentiment === 'Positive';
-      const positiveToNegative =
-        oldSentiment === 'Positive' &&
-        newSentiment === 'Negative';
-
-      const [_, review] =
-        await this.prismaService.$transaction([
-          // Update the review and sentiment
-          this.prismaService.movieReviews.update({
-            where: {
-              movieUserId: userId,
-              id: reviewId,
-            },
-            data: {
-              review: updatedReview,
-              sentiment: newSentiment,
-            },
-          }),
-          // Update the movie's overall sentiment by first decrementing the old sentiment
-          // and then increment the new sentiment
-          this.prismaService.movieSentiment.update({
-            where: {
-              movieId,
-            },
-            data: {
-              negative: {
-                increment: negativeToPositive
-                  ? -1
-                  : positiveToNegative
-                    ? 1
-                    : 0,
-              },
-              positive: {
-                increment: positiveToNegative
-                  ? -1
-                  : negativeToPositive
-                    ? 1
-                    : 0,
-              },
-            },
-          }),
-        ]);
-
-      return review;
+      await this.sentimentUtilsService.editReview(
+        movieId,
+        reviewId,
+        updatedReview,
+        userId,
+      );
     } catch (error) {
       if (error instanceof AxiosError) {
         this.handleModelError(error);
@@ -248,7 +196,13 @@ export class SentimentService {
     movieId: number,
     reviewId: string,
     userId: string,
-  ) {}
+  ): Promise<void> {
+    await this.sentimentUtilsService.deleteReview(
+      movieId,
+      reviewId,
+      userId,
+    );
+  }
 
   private handleModelError(error: AxiosError) {
     if (error.response.status === 500) {
