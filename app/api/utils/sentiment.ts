@@ -1,8 +1,8 @@
-import { MovieReview } from '~/types';
+import { Review } from '~/types';
 import request from '..';
 
-const getReviews = async (id: string): Promise<MovieReview[]> => {
-  const response = await request<{ reviews: MovieReview[] }>(
+const getReviews = async (id: string): Promise<Review[]> => {
+  const response = await request<{ reviews: Review[] }>(
     'get',
     `/sentiment/get-all-reviews/${id}`
   );

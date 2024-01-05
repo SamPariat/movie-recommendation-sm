@@ -55,7 +55,7 @@ const logout = async (access_token: string): Promise<void> => {
   );
 };
 
-const refreshToken = async (
+const cycleTokens = async (
   refresh_token: string
 ): Promise<Tokens> => {
   const response = await request<Tokens>(
@@ -71,4 +71,4 @@ const refreshToken = async (
   return response.data;
 };
 
-export { login, logout, profile, refreshToken, signup };
+export { cycleTokens, login, logout, profile, signup };

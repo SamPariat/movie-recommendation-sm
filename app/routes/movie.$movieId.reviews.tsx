@@ -16,9 +16,9 @@ import {
 } from 'remix-toast';
 
 import {
+  cycleTokens,
   getReviews,
   getSentimentData,
-  refreshToken,
   saveReview,
 } from '~/api';
 import { MovieReviewForm } from '~/components/forms';
@@ -82,7 +82,7 @@ export async function action({
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response?.status === 401) {
-        const tokens = await refreshToken(
+        const tokens = await cycleTokens(
           session.get('refresh_token')!
         );
 
@@ -101,7 +101,7 @@ export async function action({
         );
       }
 
-      return jsonWithError(null, error.message);
+      return jsonWithError(null, error.response?.data.message);
     }
 
     return jsonWithError(null, 'Something went wrong...');
