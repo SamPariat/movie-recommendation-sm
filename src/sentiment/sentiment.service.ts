@@ -71,6 +71,8 @@ export class SentimentService {
     review: string,
     movieUserId: string,
   ): Promise<MovieReviews> {
+    review = review.trim();
+
     try {
       const sentiment =
         await this.sentimentUtilsService.getSentimentOfReview(
@@ -177,6 +179,8 @@ export class SentimentService {
     updatedReview: string,
     userId: string,
   ): Promise<void> {
+    updatedReview = updatedReview.trim();
+
     try {
       await this.sentimentUtilsService.editReview(
         movieId,

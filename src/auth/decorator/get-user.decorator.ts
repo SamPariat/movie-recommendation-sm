@@ -9,6 +9,6 @@ export const GetUser = createParamDecorator(
 
     if (!data) return request.user;
 
-    return request.user.data;
+    return request.user[data];
   },
 );
