@@ -6,6 +6,7 @@ Welcome to CineSuggest, the ultimate movie recommendation system that combines t
 
 - Discover movies tailored to your taste through advanced cosine similarity algorithms.
 - Uncover the emotional heartbeat of reviews to ensure every movie resonates with your mood.
+- Check remix-frontend and nestjs-backend branches for current work.
 
 ## Authors
 
